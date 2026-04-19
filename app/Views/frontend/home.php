@@ -148,20 +148,56 @@
         </div>
     </div>
 
-    <!-- Video Section -->
     <section class="video-section">
         <div class="section-container">
-            <h2 class="section-main-title" style="color: white; border-color: white;">Khabran TV</h2>
+            <h2 class="section-main-title">Khabran TV <span style="font-size: 0.8rem; background: var(--crimson); padding: 4px 10px; border-radius: 4px; vertical-align: middle; margin-left: 15px; letter-spacing: 2px;">LIVE</span></h2>
+            
             <div class="video-grid">
-                <div class="video-wrapper">
-                    <div style="background: #333; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <i class="fab fa-youtube" style="font-size: 5rem; color: red;"></i>
+                <!-- Featured Video -->
+                <div class="video-main">
+                    <div class="featured-video">
+                        <div class="play-overlay">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <img src="<?= SITE_URL ?>/assets/img/video-cover.png" alt="Video Cover" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.4;">
+                    </div>
+                    <div class="video-info-box">
+                        <h3>Impact of New Farm Policies on Rural Punjab Districts</h3>
+                        <div class="video-meta">
+                            <span><i class="fas fa-eye"></i> 4.5K Views</span>
+                            <span><i class="fas fa-calendar-alt"></i> 2 Hours Ago</span>
+                            <span style="color: var(--crimson);"><i class="fas fa-broadcast-tower"></i> High Definition</span>
+                        </div>
                     </div>
                 </div>
-                <div class="video-list">
-                    <div class="video-item"><div class="v-thumb"></div><span>Impact of New Farm Laws...</span></div>
-                    <div class="video-item"><div class="v-thumb"></div><span>Ludhiana Industrial Hub...</span></div>
-                    <div class="video-item"><div class="v-thumb"></div><span>Exclusive: CM Interview...</span></div>
+
+                <!-- Video Playlist -->
+                <div class="video-playlist">
+                    <h4 style="margin: 0 0 20px 0; color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px;">Up Next</h4>
+                    
+                    <a href="#" class="video-card-mini">
+                        <div class="mini-thumb"></div>
+                        <div class="mini-content">
+                            <span class="v-title">Ludhiana Industrial Hub: Special Ground Report</span>
+                            <span class="v-meta">12:45 • News Tech</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="video-card-mini">
+                        <div class="mini-thumb"></div>
+                        <div class="mini-content">
+                            <span class="v-title">Exclusive: Interview with Punjab Agriculture Minister</span>
+                            <span class="v-meta">24:10 • Politics</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="video-card-mini">
+                        <div class="mini-thumb"></div>
+                        <div class="mini-content">
+                            <span class="v-title">Culture & Heritage: The Lost Arts of Amritsar</span>
+                            <span class="v-meta">08:12 • Culture</span>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
