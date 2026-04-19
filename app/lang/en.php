@@ -1,0 +1,20 @@
+<?php
+return [
+    'home' => 'HOME',
+    'politics' => 'POLITICS',
+    'ground_reports' => 'GROUND REPORTS',
+    'opinion' => 'OPINION',
+    'india' => 'INDIA',
+    'economy' => 'ECONOMY',
+    'world' => 'WORLD',
+    'breaking_news' => 'BREAKING NEWS',
+    'latest_news' => 'LATEST NEWS',
+    'latest_updates' => 'LATEST UPDATES',
+    'opinions' => 'OPINIONS',
+    'related_news' => 'RELATED NEWS',
+    'digital_edition' => 'DIGITAL EDITION',
+    'support_us' => 'Support Our Journalism',
+    'mission' => 'Connecting Punjab to the World with Authority, Integrity, and trilingual clarity.',
+    'copyright' => 'Khabran Portal. Inspired by the best, built for the people.',
+    'no_more' => 'No more news for today.',
+];
