@@ -45,6 +45,9 @@
             <a href="<?= SITE_URL ?>/admin/analytics" class="nav-link">
                 <i class="fas fa-microchip"></i> Analytics
             </a>
+            <a href="<?= SITE_URL ?>/admin/users" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], 'users') ? 'active' : '' ?>">
+                <i class="fas fa-user-shield"></i> Staff Management
+            </a>
             <a href="<?= SITE_URL ?>/admin/settings" class="nav-link">
                 <i class="fas fa-cog"></i> System Settings
             </a>
