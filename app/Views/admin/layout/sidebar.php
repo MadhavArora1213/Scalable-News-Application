@@ -68,6 +68,26 @@
             </ul>
         </div>
 
+        <!-- Subcategories Dropdown -->
+        <div class="nav-item-dropdown <?= strpos($_SERVER['REQUEST_URI'], '/admin/subcategories') !== false ? 'open' : '' ?>">
+            <div class="nav-link dropdown-toggle">
+                <span><i class="fas fa-sitemap"></i> Subcategories</span>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <ul class="nav-dropdown">
+                <li>
+                    <a href="<?= SITE_URL ?>/admin/subcategories" class="nav-link <?= (strpos($_SERVER['REQUEST_URI'], '/admin/subcategories') !== false && strpos($_SERVER['REQUEST_URI'], '/admin/subcategories/new') === false && strpos($_SERVER['REQUEST_URI'], '/edit') === false) ? 'active' : '' ?>">
+                        <i class="fas fa-list"></i> All Subcategories
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= SITE_URL ?>/admin/subcategories/new" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/subcategories/new') !== false ? 'active' : '' ?>">
+                        <i class="fas fa-plus-circle"></i> Create Subcategory
+                    </a>
+                </li>
+            </ul>
+        </div>
+
         <a href="<?= SITE_URL ?>/admin/roles" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/roles') !== false ? 'active' : '' ?>">
             <i class="fas fa-user-shield"></i> Roles & Permissions
         </a>

@@ -36,6 +36,14 @@ $router->get('admin/tags/{id}/edit', 'AdminTagController@edit');
 $router->post('admin/tags/{id}/update', 'AdminTagController@update');
 $router->post('admin/tags/{id}/delete', 'AdminTagController@delete');
 
+// Subcategory Management
+$router->get('admin/subcategories', 'AdminSubcategoryController@index');
+$router->get('admin/subcategories/new', 'AdminSubcategoryController@create');
+$router->post('admin/subcategories/store', 'AdminSubcategoryController@store');
+$router->get('admin/subcategories/{id}/edit', 'AdminSubcategoryController@edit');
+$router->post('admin/subcategories/{id}/update', 'AdminSubcategoryController@update');
+$router->post('admin/subcategories/{id}/delete', 'AdminSubcategoryController@delete');
+
 // Roles & Permissions
 $router->get('admin/roles', 'RolesController@index');
 
