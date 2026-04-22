@@ -22,7 +22,7 @@ class MediaController extends BaseController {
     public function upload() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Upload logic
-            header('Location: /news/Scalable-News-Application/admin/media');
+            header('Location: /News_Website/admin/media');
             exit;
         }
     }

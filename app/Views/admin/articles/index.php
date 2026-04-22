@@ -2,7 +2,7 @@
 
 <div class="admin-content">
     <header class="content-header">
-        <h1>Latest Articles</h1>
+        <h1>All Articles</h1>
         <div class="header-actions">
             <a href="<?= SITE_URL ?>/admin/articles/new" class="btn btn-primary"><i class="fas fa-plus"></i> NEW ARTICLE</a>
         </div>
@@ -16,6 +16,8 @@
                         <th>Image</th>
                         <th>Title</th>
                         <th>Category</th>
+                        <th>Lang</th>
+                        <th>Priority</th>
                         <th>Status</th>
                         <th>Date</th>
                         <th>Actions</th>
@@ -36,6 +38,8 @@
                             </div>
                         </td>
                         <td><span class="badge"><?= htmlspecialchars($art['category_name']) ?></span></td>
+                        <td><span class="badge" style="text-transform: uppercase;"><?= $art['lang'] ?></span></td>
+                        <td><span class="status-pill <?= $art['priority'] ?>"><?= ucfirst($art['priority']) ?></span></td>
                         <td><span class="status-pill <?= $art['status'] ?>"><?= ucfirst($art['status']) ?></span></td>
                         <td><?= date('M d, Y', strtotime($art['created_at'])) ?></td>
                         <td>

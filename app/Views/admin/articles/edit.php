@@ -5,7 +5,7 @@ require __DIR__ . '/../layout/header.php';
 <!-- TinyMCE -->
 <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
-<form action="/news/Scalable-News-Application/admin/articles/<?= $article['id'] ?>/update" method="POST" enctype="multipart/form-data">
+<form action="/News_Website/admin/articles/<?= $article['id'] ?>/update" method="POST" enctype="multipart/form-data">
     <div style="display: grid; grid-template-columns: 1fr 350px; gap: 24px;">
         <div class="card">
             <div class="card-header">
@@ -15,6 +15,12 @@ require __DIR__ . '/../layout/header.php';
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" id="title" name="title" class="form-control" style="font-size: 24px; font-weight: 700; padding: 16px;" value="<?= htmlspecialchars($article['title']) ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="slug">URL Slug</label>
+                    <input type="text" id="slug" name="slug" class="form-control" value="<?= htmlspecialchars($article['slug']) ?>" readonly>
+                    <small style="color: #64748b; font-size: 0.75rem;">URL slugs are locked after creation to protect SEO.</small>
                 </div>
                 
                 <div class="form-group">
@@ -62,8 +68,8 @@ require __DIR__ . '/../layout/header.php';
                     <div class="form-group">
                         <label for="lang">Language</label>
                         <select name="lang" id="lang" class="form-control">
-                            <option value="pa" <?= $article['lang'] === 'pa' ? 'selected' : '' ?>>Punjabi (ਪੰਜਾਬੀ)</option>
-                            <option value="hi" <?= $article['lang'] === 'hi' ? 'selected' : '' ?>>Hindi (हिन्दी)</option>
+                            <option value="pa" <?= $article['lang'] === 'pa' ? 'selected' : '' ?>>Punjabi (à¨ªà©°à¨œà¨¾à¨¬à©€)</option>
+                            <option value="hi" <?= $article['lang'] === 'hi' ? 'selected' : '' ?>>Hindi (à¤¹à¤¿à¤¨à¥à¤¦à¥€)</option>
                             <option value="en" <?= $article['lang'] === 'en' ? 'selected' : '' ?>>English</option>
                         </select>
                     </div>

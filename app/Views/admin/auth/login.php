@@ -19,14 +19,14 @@ require __DIR__ . '/../layout/header.php';
             </div>
         <?php endif; ?>
 
-        <form action="/news/Scalable-News-Application/admin/login" method="POST">
+        <form action="/News_Website/admin/login" method="POST">
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" class="form-control" placeholder="admin@khabran.com" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
+                <input type="password" id="password" name="password" class="form-control" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
             </div>
             <div class="form-group" style="display: flex; justify-content: space-between; align-items: center; margin-top: -10px;">
                 <label style="display: flex; align-items: center; gap: 8px; font-weight: 400; cursor: pointer;">

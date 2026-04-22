@@ -16,8 +16,25 @@ class CategoryAdminController extends BaseController {
     public function index() {
         $model = new CategoryModel();
         $this->render('admin/categories/index', [
-            'title' => 'Manage Navigation & Categories',
+            'title' => 'All Categories',
             'categories' => $model->getAll()
+        ]);
+    }
+
+    public function create() {
+        $this->render('admin/categories/create', [
+            'title' => 'Create New Category'
+        ]);
+    }
+
+    public function edit($id) {
+        $model = new CategoryModel();
+        $category = $model->findById($id);
+        if (!$category) die("Category not found");
+
+        $this->render('admin/categories/edit', [
+            'title' => 'Edit Category',
+            'category' => $category
         ]);
     }
 
@@ -28,12 +45,37 @@ class CategoryAdminController extends BaseController {
                 ':name_pa' => $_POST['name_pa'] ?? '',
                 ':name_hi' => $_POST['name_hi'] ?? '',
                 ':name_en' => $_POST['name_en'] ?? '',
-                ':slug' => SlugHelper::create($_POST['name_en'] ?? ''),
+                ':slug' => !empty($_POST['slug']) ? SlugHelper::create($_POST['slug']) : SlugHelper::create($_POST['name_en'] ?? ''),
                 ':parent_id' => null,
                 ':sort_order' => $_POST['sort_order'] ?? 0
             ];
             $model->save($data);
-            header('Location: /news/Scalable-News-Application/admin/categories');
+            header('Location: ' . SITE_URL . '/admin/categories');
+            exit;
+        }
+    }
+
+    public function update($id) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $model = new CategoryModel();
+            $data = [
+                'name_pa' => $_POST['name_pa'] ?? '',
+                'name_hi' => $_POST['name_hi'] ?? '',
+                'name_en' => $_POST['name_en'] ?? '',
+                'slug' => !empty($_POST['slug']) ? SlugHelper::create($_POST['slug']) : SlugHelper::create($_POST['name_en'] ?? ''),
+                'sort_order' => $_POST['sort_order'] ?? 0
+            ];
+            $model->update($id, $data);
+            header('Location: ' . SITE_URL . '/admin/categories');
+            exit;
+        }
+    }
+
+    public function delete($id) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $model = new CategoryModel();
+            $model->delete($id);
+            header('Location: ' . SITE_URL . '/admin/categories');
             exit;
         }
     }

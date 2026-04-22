@@ -11,6 +11,12 @@ class CategoryController extends BaseController {
      * Show articles for a specific category
      */
     public function index(string $lang, string $category) {
+        // Validate language to prevent SQL errors and accidental admin route matching
+        if (!in_array($lang, ['pa', 'hi', 'en'])) {
+            http_response_code(404);
+            die("404 - Invalid Language");
+        }
+
         $articleModel = new ArticleModel();
         
         // 1. Get Category Articles

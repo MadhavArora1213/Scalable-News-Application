@@ -1,4 +1,4 @@
-    <?php if(!isset($hide_sidebar)): ?>
+<?php if(!isset($hide_sidebar)): ?>
         </main>
     </div>
     <?php endif; ?>

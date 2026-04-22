@@ -72,7 +72,7 @@ class AdminArticleController extends BaseController {
             }
 
             $articleModel->save($data);
-            header('Location: /news/Scalable-News-Application/admin/articles');
+            header('Location: /News_Website/admin/articles');
             exit;
         }
     }
@@ -100,8 +100,12 @@ class AdminArticleController extends BaseController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $articleModel = new ArticleModel();
             
+            $title = $_POST['title'] ?? '';
+            $slug = !empty($_POST['slug']) ? SlugHelper::create($_POST['slug']) : SlugHelper::create($title);
+
             $data = [
-                'title' => $_POST['title'] ?? '',
+                'title' => $title,
+                'slug' => $slug,
                 'body' => $_POST['body'] ?? '',
                 'excerpt' => $_POST['excerpt'] ?? '',
                 'category_id' => $_POST['category_id'] ?? 1,
@@ -118,7 +122,7 @@ class AdminArticleController extends BaseController {
             }
 
             $articleModel->update($id, $data);
-            header('Location: /news/Scalable-News-Application/admin/articles');
+            header('Location: /News_Website/admin/articles');
             exit;
         }
     }
@@ -127,7 +131,7 @@ class AdminArticleController extends BaseController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $articleModel = new ArticleModel();
             $articleModel->delete($id);
-            header('Location: /news/Scalable-News-Application/admin/articles');
+            header('Location: /News_Website/admin/articles');
             exit;
         }
     }
