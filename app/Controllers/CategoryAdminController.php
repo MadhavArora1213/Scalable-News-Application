@@ -46,7 +46,6 @@ class CategoryAdminController extends BaseController {
                 ':name_hi' => $_POST['name_hi'] ?? '',
                 ':name_en' => $_POST['name_en'] ?? '',
                 ':slug' => !empty($_POST['slug']) ? SlugHelper::create($_POST['slug']) : SlugHelper::create($_POST['name_en'] ?? ''),
-                ':parent_id' => null,
                 ':sort_order' => $_POST['sort_order'] ?? 0
             ];
             $model->save($data);

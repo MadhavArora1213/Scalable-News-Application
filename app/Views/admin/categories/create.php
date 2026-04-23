@@ -26,7 +26,7 @@ require __DIR__ . '/../layout/header.php';
 
                     <div class="form-group">
                         <label>Category Name (ਪੰਜਾਬੀ)</label>
-                        <input type="text" name="name_pa" class="form-control" placeholder="ਜਿਵੇਂ ਕਿ ਰਾਜਨੀਤੀ" required>
+                        <input type="text" name="name_pa" class="form-control" placeholder="ਜਿਵੇਂ ਕਿ ਰਾਜਨੀਤੀ" style="font-family: 'Noto Sans Gurmukhi', sans-serif; font-size: 1.1rem;" required>
                     </div>
 
                     <div class="form-group">

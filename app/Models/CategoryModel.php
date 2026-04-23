@@ -25,7 +25,7 @@ class CategoryModel {
     }
     
     public function save(array $data): int {
-        $stmt = $this->db->prepare("INSERT INTO categories (name_pa, name_hi, name_en, slug, parent_id, sort_order) VALUES (:name_pa, :name_hi, :name_en, :slug, :parent_id, :sort_order)");
+        $stmt = $this->db->prepare("INSERT INTO categories (name_pa, name_hi, name_en, slug, sort_order) VALUES (:name_pa, :name_hi, :name_en, :slug, :sort_order)");
         $stmt->execute($data);
         return (int)$this->db->lastInsertId();
     }

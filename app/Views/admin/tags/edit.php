@@ -16,20 +16,43 @@ require __DIR__ . '/../layout/header.php';
                 <form action="<?= SITE_URL ?>/admin/tags/<?= $tag['id'] ?>/update" method="POST">
                     <div class="form-group">
                         <label>Tag Name</label>
-                        <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($tag['name']) ?>" required>
+                        <input type="text" id="name" name="name" class="form-control" value="<?= htmlspecialchars($tag['name']) ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label>URL Slug</label>
-                        <input type="text" name="slug" class="form-control" value="<?= htmlspecialchars($tag['slug']) ?>" readonly>
-                        <small style="color: #64748b; font-size: 0.75rem;">URL slugs are locked after creation.</small>
+                        <input type="text" id="slug" name="slug" class="form-control" value="<?= htmlspecialchars($tag['slug']) ?>" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category (Optional)</label>
+                        <select name="category_id" id="category_id" class="form-control">
+                            <option value="">-- Select Category --</option>
+                            <?php foreach($categories as $cat): ?>
+                                <option value="<?= $cat['id'] ?>" <?= $tag['category_id'] == $cat['id'] ? 'selected' : '' ?>>
+                                    <?= $cat['name_en'] ?> (<?= $cat['name_pa'] ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Subcategory (Optional)</label>
+                        <select name="subcategory_id" id="subcategory_id" class="form-control">
+                            <option value="">-- Select Subcategory --</option>
+                            <?php foreach($subcategories as $sub): ?>
+                                <option value="<?= $sub['id'] ?>" data-category="<?= $sub['category_id'] ?>" <?= $tag['subcategory_id'] == $sub['id'] ? 'selected' : '' ?>>
+                                    <?= $sub['name_en'] ?> (<?= $sub['name_pa'] ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label>Language</label>
                         <select name="lang" class="form-control">
-                            <option value="pa" <?= $tag['lang'] === 'pa' ? 'selected' : '' ?>>Punjabi (à¨ªà©°à¨œà¨¾à¨¬à©€)</option>
-                            <option value="hi" <?= $tag['lang'] === 'hi' ? 'selected' : '' ?>>Hindi (à¤¹à¤¿à¤¨à¥ à¤¦à¥€)</option>
+                            <option value="pa" <?= $tag['lang'] === 'pa' ? 'selected' : '' ?>>Punjabi (ਪੰਜਾਬੀ)</option>
+                            <option value="hi" <?= $tag['lang'] === 'hi' ? 'selected' : '' ?>>Hindi (हिन्दी)</option>
                             <option value="en" <?= $tag['lang'] === 'en' ? 'selected' : '' ?>>English</option>
                         </select>
                     </div>
@@ -42,5 +65,32 @@ require __DIR__ . '/../layout/header.php';
         </div>
     </div>
 </div>
+
+<script>
+    // Auto-generate Slug from Name even during edit
+    document.getElementById('name').addEventListener('input', function() {
+        const name = this.value;
+        const slug = name.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
+            .replace(/(^-|-$)/g, '');    // Remove leading/trailing hyphens
+        document.getElementById('slug').value = slug;
+    });
+
+    // Filter Subcategories based on Category
+    const catSelect = document.getElementById('category_id');
+    const subSelect = document.getElementById('subcategory_id');
+    const allSubs = Array.from(subSelect.options);
+
+    catSelect.addEventListener('change', function() {
+        const catId = this.value;
+        subSelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
+        
+        allSubs.forEach(option => {
+            if (option.value === "" || option.getAttribute('data-category') === catId) {
+                if (option.value !== "") subSelect.add(option);
+            }
+        });
+    });
+</script>
 
 <?php require __DIR__ . '/../layout/footer.php'; ?>

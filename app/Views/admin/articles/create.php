@@ -83,9 +83,19 @@ require __DIR__ . '/../layout/header.php';
                         </div>
                         <div class="form-group">
                             <label>Category</label>
-                            <select name="category_id" class="form-control">
+                            <select id="category_id" name="category_id" class="form-control" required>
+                                <option value="">-- Select Category --</option>
                                 <?php foreach($categories as $cat): ?>
                                     <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['name_en'] ?? $cat['name_pa']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Subcategory</label>
+                            <select id="subcategory_id" name="subcategory_id" class="form-control">
+                                <option value="">-- Select Subcategory --</option>
+                                <?php foreach($subcategories as $sub): ?>
+                                    <option value="<?= $sub['id'] ?>" data-parent="<?= $sub['category_id'] ?>" style="display:none;"><?= htmlspecialchars($sub['name_en']) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -97,6 +107,22 @@ require __DIR__ . '/../layout/header.php';
                                 <option value="top">Top Story</option>
                                 <option value="breaking">Breaking News</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="admin-card">
+                        <h3>Article Tags</h3>
+                        <div class="tags-selector-box">
+                            <?php foreach($tags as $tag): ?>
+                            <label class="tag-checkbox-item">
+                                <input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>">
+                                <span><?= htmlspecialchars($tag['name']) ?></span>
+                            </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="form-group" style="margin-top: 15px;">
+                            <label style="font-size: 0.75rem;">Add New Tags (comma separated)</label>
+                            <input type="text" name="custom_tags" class="form-control" placeholder="e.g. Health, Sports, Punjab">
                         </div>
                     </div>
 
@@ -147,6 +173,24 @@ require __DIR__ . '/../layout/header.php';
             .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
             .replace(/(^-|-$)/g, '');    // Remove leading/trailing hyphens
         document.getElementById('slug').value = slug;
+    });
+
+    // Dynamic Subcategory Filtering
+    document.getElementById('category_id').addEventListener('change', function() {
+        const categoryId = this.value;
+        const subSelect = document.getElementById('subcategory_id');
+        const options = subSelect.querySelectorAll('option');
+        
+        subSelect.value = ""; // Reset subcategory
+        
+        options.forEach(opt => {
+            if (opt.value === "") return;
+            if (opt.getAttribute('data-parent') === categoryId) {
+                opt.style.display = "block";
+            } else {
+                opt.style.display = "none";
+            }
+        });
     });
 </script>
 

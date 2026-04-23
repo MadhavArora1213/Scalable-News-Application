@@ -6,7 +6,7 @@ require __DIR__ . '/../layout/header.php';
 <div class="auth-wrapper">
     <div class="auth-card">
         <div style="text-align: center; margin-bottom: 30px;">
-            <div style="font-size: 40px; color: var(--primary); margin-bottom: 10px;">
+            <div style="font-size: 40px; color: var(--admin-primary); margin-bottom: 10px;">
                 <i class="fas fa-newspaper"></i>
             </div>
             <h1>Welcome Back</h1>
@@ -19,7 +19,7 @@ require __DIR__ . '/../layout/header.php';
             </div>
         <?php endif; ?>
 
-        <form action="/News_Website/admin/login" method="POST">
+        <form action="<?= SITE_URL ?>/admin/login" method="POST">
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" class="form-control" placeholder="admin@khabran.com" required>
@@ -32,7 +32,7 @@ require __DIR__ . '/../layout/header.php';
                 <label style="display: flex; align-items: center; gap: 8px; font-weight: 400; cursor: pointer;">
                     <input type="checkbox"> Remember me
                 </label>
-                <a href="#" style="font-size: 14px; color: var(--primary); text-decoration: none;">Forgot?</a>
+                <a href="#" style="font-size: 14px; color: var(--admin-primary); text-decoration: none;">Forgot?</a>
             </div>
             <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">
                 <span>Sign In</span>

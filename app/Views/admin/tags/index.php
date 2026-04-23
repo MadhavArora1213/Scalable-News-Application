@@ -19,18 +19,22 @@ require __DIR__ . '/../layout/header.php';
                             <th>ID</th>
                             <th>Tag Name</th>
                             <th>Slug</th>
+                            <th>Category</th>
+                            <th>Subcategory</th>
                             <th>Language</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if(empty($tags)): ?>
-                            <tr><td colspan="5" style="text-align:center; padding: 40px;">No tags found. Start by creating one!</td></tr>
+                            <tr><td colspan="7" style="text-align:center; padding: 40px;">No tags found. Start by creating one!</td></tr>
                         <?php else: foreach($tags as $tag): ?>
                         <tr>
                             <td><?= $tag['id'] ?></td>
                             <td style="font-weight: 700; color: var(--admin-primary);"><?= htmlspecialchars($tag['name']) ?></td>
                             <td><span class="badge">/<?= htmlspecialchars($tag['slug']) ?></span></td>
+                            <td><span class="badge" style="background:#e2e8f0; color:#475569;"><?= $tag['category_name'] ?? 'N/A' ?></span></td>
+                            <td><span class="badge" style="background:#f1f5f9; color:#64748b;"><?= $tag['subcategory_name'] ?? 'N/A' ?></span></td>
                             <td><span class="badge" style="text-transform: uppercase;"><?= $tag['lang'] ?></span></td>
                             <td>
                                 <div class="action-group">

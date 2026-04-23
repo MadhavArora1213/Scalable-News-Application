@@ -16,6 +16,7 @@
                         <th>Image</th>
                         <th>Title</th>
                         <th>Category</th>
+                        <th>Tags</th>
                         <th>Lang</th>
                         <th>Priority</th>
                         <th>Status</th>
@@ -38,6 +39,11 @@
                             </div>
                         </td>
                         <td><span class="badge"><?= htmlspecialchars($art['category_name']) ?></span></td>
+                        <td>
+                            <div style="max-width: 150px; font-size: 0.75rem; color: #64748b; line-height: 1.2;">
+                                <?= $art['tag_list'] ? htmlspecialchars($art['tag_list']) : '<em style="color:#cbd5e1;">No tags</em>' ?>
+                            </div>
+                        </td>
                         <td><span class="badge" style="text-transform: uppercase;"><?= $art['lang'] ?></span></td>
                         <td><span class="status-pill <?= $art['priority'] ?>"><?= ucfirst($art['priority']) ?></span></td>
                         <td><span class="status-pill <?= $art['status'] ?>"><?= ucfirst($art['status']) ?></span></td>

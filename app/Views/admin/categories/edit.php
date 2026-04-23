@@ -16,13 +16,12 @@ require __DIR__ . '/../layout/header.php';
                 <form action="<?= SITE_URL ?>/admin/categories/<?= $category['id'] ?>/update" method="POST">
                     <div class="form-group">
                         <label>Category Name (English)</label>
-                        <input type="text" name="name_en" class="form-control" value="<?= htmlspecialchars($category['name_en']) ?>" required>
+                        <input type="text" id="name_en" name="name_en" class="form-control" value="<?= htmlspecialchars($category['name_en']) ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label>URL Slug</label>
-                        <input type="text" name="slug" class="form-control" value="<?= htmlspecialchars($category['slug']) ?>" readonly>
-                        <small style="color: #64748b; font-size: 0.75rem;">URL slugs are locked after creation.</small>
+                        <input type="text" id="slug" name="slug" class="form-control" value="<?= htmlspecialchars($category['slug']) ?>" readonly>
                     </div>
 
                     <div class="form-group">
@@ -48,5 +47,16 @@ require __DIR__ . '/../layout/header.php';
         </div>
     </div>
 </div>
+
+<script>
+    // Auto-generate Slug from English Name even during edit
+    document.getElementById('name_en').addEventListener('input', function() {
+        const name = this.value;
+        const slug = name.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
+            .replace(/(^-|-$)/g, '');    // Remove leading/trailing hyphens
+        document.getElementById('slug').value = slug;
+    });
+</script>
 
 <?php require __DIR__ . '/../layout/footer.php'; ?>
