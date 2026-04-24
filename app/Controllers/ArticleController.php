@@ -32,8 +32,10 @@ class ArticleController extends BaseController {
         // Placeholder for comments (CommentModel needs to be created next)
         $comments = []; 
 
-        // Increment view count
+        // Increment view count & Record Analytics
         $model->incrementViews($article['id']);
+        $analyticsModel = new \App\Models\AnalyticsModel();
+        $analyticsModel->recordView($article['id']);
 
         // Language translations (Mockup for now)
         $translations = [

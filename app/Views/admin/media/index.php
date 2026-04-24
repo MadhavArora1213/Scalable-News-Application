@@ -1,84 +1,91 @@
-<?php 
-require __DIR__ . '/../layout/header.php'; 
-?>
+<?php require dirname(__DIR__) . '/layout/header.php'; ?>
 
 <div class="admin-content">
-    <div class="admin-container">
-        <header class="content-header">
-            <h1><i class="fas fa-photo-video"></i> Media Library & Assets</h1>
-        </header>
-
-        <!-- Upload Zone -->
-        <div class="admin-panel-box" style="margin-bottom: 40px; background: #fff; border: 2px dashed #e2e8f0; padding: 40px; text-align: center;">
-            <form action="<?= SITE_URL ?>/admin/media/upload" method="POST" enctype="multipart/form-data">
-                <div style="margin-bottom: 20px;">
-                    <i class="fas fa-cloud-upload-alt" style="font-size: 50px; color: var(--admin-primary); opacity: 0.3;"></i>
-                </div>
-                <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Drag and drop files here to upload</h3>
-                <p style="color: #718096; margin-bottom: 20px;">Supported formats: JPG, PNG, WebP, MP4 (Max 10MB)</p>
-                
-                <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
-                    <input type="file" name="file" class="form-control" style="max-width: 300px;" required>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> UPLOAD ASSET
-                    </button>
-                </div>
-            </form>
+    <header class="content-header">
+        <h1><i class="fas fa-images" style="color: var(--admin-primary); margin-right: 10px;"></i> Central Media Library</h1>
+        <div style="display: flex; gap: 15px;">
+             <button onclick="document.getElementById('uploadModal').style.display='flex'" class="btn btn-primary">
+                <i class="fas fa-upload"></i> UPLOAD ASSET
+            </button>
         </div>
+    </header>
 
-        <!-- Filter Bar -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-            <div style="display: flex; gap: 15px;">
-                <button class="btn btn-secondary active">All Media</button>
-                <button class="btn btn-secondary">Images</button>
-                <button class="btn btn-secondary">Videos</button>
-            </div>
-            <div style="position: relative;">
-                <input type="text" placeholder="Search files..." class="form-control" style="padding-left: 40px; width: 300px;">
-                <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #a0aec0;"></i>
-            </div>
-        </div>
-
-        <!-- Media Grid -->
-        <div class="admin-panel-box" style="padding: 30px;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px;">
-                <!-- Placeholder Images -->
-                <?php for($i=1; $i<=8; $i++): ?>
-                <div class="media-card">
-                    <div style="aspect-ratio: 4/3; background: #f8fafc; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid #edf2f7; transition: 0.3s;">
-                        <img src="https://picsum.photos/400/300?random=<?= $i ?>" style="width: 100%; height: 100%; object-fit: cover;">
-                        <div class="media-overlay">
-                            <button class="btn-icon" title="View"><i class="fas fa-expand"></i></button>
-                            <button class="btn-icon" title="Copy URL"><i class="fas fa-link"></i></button>
-                            <button class="btn-icon delete" title="Delete"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                    <div style="padding: 12px 0;">
-                        <span style="font-size: 0.85rem; font-weight: 700; color: #2d3748; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">news_story_cover_<?= $i ?>.jpg</span>
-                        <span style="font-size: 0.75rem; color: #718096;">1200 x 900 • 240 KB</span>
-                    </div>
-                </div>
-                <?php endfor; ?>
+    <div style="background: rgba(15, 23, 42, 0.5); padding: 25px; border-radius: 15px; border: 1px solid var(--admin-border); margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <p style="color: var(--admin-text-muted); font-size: 0.85rem;">Manage all your news photos in one place. Add alt text for Google SEO and legal credits for news agencies.</p>
+            <div style="font-size: 0.8rem; color: #fff; background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 20px;">
+                Total Assets: <strong><?= count($media) ?></strong>
             </div>
         </div>
     </div>
+
+    <!-- Media Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;">
+        <?php if(empty($media)): ?>
+            <div style="grid-column: 1 / -1; text-align: center; padding: 100px; color: var(--admin-text-muted);">
+                <i class="fas fa-photo-video" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.2;"></i>
+                <p>Your media library is empty. Upload your first news image!</p>
+            </div>
+        <?php else: foreach($media as $item): ?>
+        <div class="admin-panel-box" style="overflow: hidden; display: flex; flex-direction: column;">
+            <div style="height: 180px; background: #000; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <img src="<?= SITE_URL . $item['path'] ?>" style="max-width: 100%; max-height: 100%; object-fit: cover;">
+                <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 5px;">
+                    <form action="<?= SITE_URL ?>/admin/media/<?= $item['id'] ?>/delete" method="POST" onsubmit="return confirm('Delete this asset? This cannot be undone.');">
+                        <button type="submit" class="btn-icon delete" style="background: rgba(239, 68, 68, 0.9); border: none; color: #fff;"><i class="fas fa-trash"></i></button>
+                    </form>
+                </div>
+            </div>
+            
+            <div style="padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 15px;">
+                <form action="<?= SITE_URL ?>/admin/media/<?= $item['id'] ?>/update" method="POST">
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px;">Alt Text (For Google SEO)</label>
+                        <input type="text" name="alt_text" class="form-control" style="font-size: 0.8rem; padding: 8px 12px;" value="<?= htmlspecialchars($item['alt_text'] ?? '') ?>" placeholder="Describe image...">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px;">Photo Credit</label>
+                        <input type="text" name="credit" class="form-control" style="font-size: 0.8rem; padding: 8px 12px;" value="<?= htmlspecialchars($item['credit'] ?? '') ?>" placeholder="e.g. Photo by Reuters">
+                    </div>
+                    <button type="submit" class="btn btn-secondary" style="width: 100%; font-size: 0.7rem; padding: 8px;">
+                        <i class="fas fa-save"></i> SAVE INFO
+                    </button>
+                </form>
+            </div>
+        </div>
+        <?php endforeach; endif; ?>
+    </div>
 </div>
 
-<style>
-.media-card:hover img { transform: scale(1.05); }
-.media-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    opacity: 0;
-    transition: 0.3s;
-}
-.media-card:hover .media-overlay { opacity: 1; }
-.btn-secondary.active { background: #edf2f7; color: var(--admin-primary); border-color: var(--admin-primary); }
-</style>
+<!-- Upload Modal -->
+<div id="uploadModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+    <div class="admin-card" style="width: 100%; max-width: 500px; margin: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <h3><i class="fas fa-cloud-upload-alt" style="color: var(--admin-primary);"></i> Upload to Library</h3>
+            <button onclick="document.getElementById('uploadModal').style.display='none'" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 1.5rem;">&times;</button>
+        </div>
+        
+        <form action="<?= SITE_URL ?>/admin/media/upload" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Choose File</label>
+                <div style="border: 2px dashed var(--admin-border); padding: 30px; border-radius: 15px; text-align: center; background: rgba(255,255,255,0.02);">
+                    <input type="file" name="file" required style="font-size: 0.85rem;">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>SEO Alt Text</label>
+                <input type="text" name="alt_text" class="form-control" placeholder="e.g. Farmers protest in Amritsar">
+            </div>
+            <div class="form-group">
+                <label>Agency/Photo Credit</label>
+                <input type="text" name="credit" class="form-control" placeholder="e.g. PTI / Getty Images">
+            </div>
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button type="button" onclick="document.getElementById('uploadModal').style.display='none'" class="btn btn-secondary" style="flex: 1;">CANCEL</button>
+                <button type="submit" class="btn btn-primary" style="flex: 1;">UPLOAD NOW</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-<?php require __DIR__ . '/../layout/footer.php'; ?>
+<?php require dirname(__DIR__) . '/layout/footer.php'; ?>

@@ -64,6 +64,24 @@ $router->get('admin/redirects', 'RedirectController@index');
 $router->post('admin/redirects/store', 'RedirectController@store');
 $router->post('admin/redirects/{id}/delete', 'RedirectController@delete');
 
+// Subscribers & Audience
+$router->get('admin/subscribers', 'SubscriberController@index');
+$router->post('admin/subscribers/{id}/delete', 'SubscriberController@delete');
+
+// Advertising & Revenue
+$router->get('admin/ads', 'AdController@index');
+$router->post('admin/ads/{id}/update', 'AdController@update');
+$router->get('admin/ads/{id}/toggle', 'AdController@toggle');
+
+// Analytics & Traffic
+$router->get('admin/analytics', 'AnalyticsController@index');
+
+// Central Media Library
+$router->get('admin/media', 'MediaController@index');
+$router->post('admin/media/upload', 'MediaController@upload');
+$router->post('admin/media/{id}/update', 'MediaController@update');
+$router->post('admin/media/{id}/delete', 'MediaController@delete');
+
 // Catch-all for other admin routes to prevent falling through to public routes
 $router->get('admin/{any}', 'AuthController@loginForm');
 

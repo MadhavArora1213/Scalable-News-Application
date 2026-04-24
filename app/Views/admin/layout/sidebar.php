@@ -88,6 +88,10 @@
             </ul>
         </div>
 
+        <a href="<?= SITE_URL ?>/admin/media" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/media') !== false ? 'active' : '' ?>">
+            <i class="fas fa-images"></i> Media Library
+        </a>
+
         <a href="<?= SITE_URL ?>/admin/roles" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/roles') !== false ? 'active' : '' ?>">
             <i class="fas fa-user-shield"></i> Roles & Permissions
         </a>
@@ -104,21 +108,23 @@
             <i class="fas fa-random"></i> Redirects
         </a>
 
-        <!-- Other modules (kept if they exist in controllers, but user wanted simplified) -->
-        <?php if (isset($show_all_modules) && $show_all_modules): ?>
-            <a href="<?= SITE_URL ?>/admin/categories" class="nav-link <?= str_contains($_SERVER['REQUEST_URI'], 'categories') ? 'active' : '' ?>">
-                <i class="fas fa-folder-tree"></i> Categories
-            </a>
-            <a href="<?= SITE_URL ?>/admin/media" class="nav-link <?= str_contains($_SERVER['REQUEST_URI'], 'media') ? 'active' : '' ?>">
-                <i class="fas fa-images"></i> Media Assets
-            </a>
-        <?php endif; ?>
+        <a href="<?= SITE_URL ?>/admin/subscribers" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/subscribers') !== false ? 'active' : '' ?>">
+            <i class="fas fa-users"></i> Subscribers
+        </a>
+
+        <a href="<?= SITE_URL ?>/admin/ads" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/ads') !== false ? 'active' : '' ?>">
+            <i class="fas fa-coins"></i> Ads Management
+        </a>
+
+        <a href="<?= SITE_URL ?>/admin/analytics" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/analytics') !== false ? 'active' : '' ?>">
+            <i class="fas fa-chart-line"></i> Analytics
+        </a>
 
     </nav>
 
     <div class="sidebar-footer">
-        <a href="<?= SITE_URL ?>/admin/logout" class="logout-btn">
-            <i class="fas fa-power-off"></i> Logout
+        <a href="<?= SITE_URL ?>/admin/logout" class="logout-link">
+            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
         </a>
     </div>
 </aside>

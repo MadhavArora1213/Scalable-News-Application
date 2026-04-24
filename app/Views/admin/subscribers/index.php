@@ -1,108 +1,77 @@
-<?php 
-require __DIR__ . '/../layout/header.php'; 
-?>
+<?php require dirname(__DIR__) . '/layout/header.php'; ?>
 
 <div class="admin-content">
-    <div class="admin-container">
-        <header class="content-header">
-            <h1><i class="fas fa-envelope-open-text"></i> Newsletter Management</h1>
-            <div class="header-actions">
-                <form action="<?= SITE_URL ?>/admin/subscribers/broadcast" method="POST" onsubmit="return confirm('Do you want to send a broadcast to all subscribers?')">
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> SEND BROADCAST</button>
-                </form>
-            </div>
-        </header>
+    <header class="content-header">
+        <h1><i class="fas fa-users" style="color: var(--admin-primary); margin-right: 10px;"></i> Audience Engagement</h1>
+        <p style="color: var(--admin-text-muted); font-size: 0.85rem; margin-top: 5px;">Manage your email newsletter subscribers and browser notification base.</p>
+    </header>
 
-        <?php if(isset($_GET['msg'])): ?>
-            <div style="background: #c6f6d5; color: #22543d; padding: 15px; border-radius: 8px; margin-bottom: 30px; border-left: 5px solid #38a169;">
-                <i class="fas fa-check-circle"></i> 
-                <?php 
-                    if($_GET['msg'] == 'Deleted') echo "Subscriber has been removed successfully.";
-                    if($_GET['msg'] == 'BroadcastSent') echo "Broadcast email has been queued and is being sent to all subscribers.";
-                ?>
+    <!-- Stats Cards -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+        <div class="admin-panel-box" style="padding: 30px; display: flex; align-items: center; gap: 25px;">
+            <div style="width: 70px; height: 70px; background: rgba(16, 185, 129, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.8rem;">
+                <i class="fas fa-envelope-open-text"></i>
             </div>
-        <?php endif; ?>
-
-        <!-- Stats Overview -->
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px;">
-            <div class="stat-card">
-                <div class="stat-val"><?= count($subscribers) ?></div>
-                <div class="stat-label">TOTAL SUBSCRIBERS</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-val"><?= rand(85, 95) ?>%</div>
-                <div class="stat-label">OPEN RATE</div>
-            </div>
-            <div class="stat-card" style="border-left: 4px solid #2ecc71;">
-                <div class="stat-val"><?= rand(5, 12) ?></div>
-                <div class="stat-label">NEW TODAY</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-val"><?= rand(1, 3) ?>%</div>
-                <div class="stat-label">UNSUBSCRIBE RATE</div>
+            <div>
+                <h2 style="font-size: 2.2rem; color: #fff; line-height: 1;"><?= $emailCount ?></h2>
+                <p style="color: var(--admin-text-muted); font-size: 0.85rem; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">Email Subscribers</p>
             </div>
         </div>
 
-        <!-- Subscribers List -->
-        <div class="admin-panel-box">
-            <div class="box-header">
-                <h3>Subscriber Database</h3>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-secondary" onclick="alert('CSV Exporting...')"><i class="fas fa-file-export"></i> EXPORT CSV</button>
-                </div>
+        <div class="admin-panel-box" style="padding: 30px; display: flex; align-items: center; gap: 25px;">
+            <div style="width: 70px; height: 70px; background: rgba(59, 130, 246, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #3b82f6; font-size: 1.8rem;">
+                <i class="fas fa-bell"></i>
             </div>
-            <div class="table-responsive">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Email Address</th>
-                            <th>Status</th>
-                            <th>Subscribed On</th>
-                            <th>Interests</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if(empty($subscribers)): ?>
-                            <!-- Dummy Data if DB empty for Demo Purposes -->
-                            <?php 
-                            $dummies = [
-                                ['id' => 101, 'email' => 'aman_news@gmail.com', 'created_at' => date('Y-m-d'), 'status' => 'verified'],
-                                ['id' => 102, 'email' => 'punjab_today@yahoo.com', 'created_at' => date('Y-m-d', strtotime('-2 days')), 'status' => 'verified'],
-                                ['id' => 103, 'email' => 'reader.123@hotmail.com', 'created_at' => date('Y-m-d', strtotime('-1 week')), 'status' => 'pending']
-                            ];
-                            foreach($dummies as $sub): 
-                            ?>
-                            <tr>
-                                <td><strong style="color: var(--admin-primary);"><?= $sub['email'] ?></strong></td>
-                                <td><span class="status-pill <?= $sub['status'] === 'verified' ? 'published' : 'draft' ?>"><?= ucfirst($sub['status']) ?></span></td>
-                                <td><?= date('M d, Y', strtotime($sub['created_at'])) ?></td>
-                                <td>Politics, Local, Sports</td>
-                                <td>
-                                    <div class="action-group">
-                                        <a href="<?= SITE_URL ?>/admin/subscribers/delete/<?= $sub['id'] ?>" class="btn-icon delete" onclick="return confirm('Are you sure?')" title="Delete"><i class="fas fa-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        <?php else: foreach($subscribers as $sub): ?>
-                        <tr>
-                            <td><strong><?= htmlspecialchars($sub['email']) ?></strong></td>
-                            <td><span class="status-pill published">Verified</span></td>
-                            <td><?= date('M d, Y', strtotime($sub['created_at'])) ?></td>
-                            <td>General</td>
-                            <td>
-                                <div class="action-group">
-                                    <a href="<?= SITE_URL ?>/admin/subscribers/delete/<?= $sub['id'] ?>" class="btn-icon delete" onclick="return confirm('Are you sure?')" title="Delete"><i class="fas fa-trash"></i></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php endforeach; endif; ?>
-                    </tbody>
-                </table>
+            <div>
+                <h2 style="font-size: 2.2rem; color: #fff; line-height: 1;"><?= $pushCount ?></h2>
+                <p style="color: var(--admin-text-muted); font-size: 0.85rem; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">Push Subscribers</p>
             </div>
+        </div>
+    </div>
+
+    <!-- Subscriber Table -->
+    <div class="admin-panel-box">
+        <div class="box-header">
+            <h3><i class="fas fa-list"></i> Newsletter Directory</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Reader Name</th>
+                        <th>Email Address</th>
+                        <th>Language</th>
+                        <th>Status</th>
+                        <th>Joined On</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if(empty($subscribers)): ?>
+                        <tr><td colspan="6" style="text-align:center; padding: 60px; color: var(--admin-text-muted); font-size: 0.85rem;">No active subscribers yet. Start growing your audience!</td></tr>
+                    <?php else: foreach($subscribers as $s): ?>
+                    <tr>
+                        <td><strong><?= htmlspecialchars($s['name'] ?: 'Guest Reader') ?></strong></td>
+                        <td><code style="font-size: 0.85rem;"><?= htmlspecialchars($s['email']) ?></code></td>
+                        <td><span style="font-size: 0.7rem; font-weight: 800; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; color: var(--admin-text-muted);"><?= strtoupper($s['lang_pref']) ?></span></td>
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: <?= $s['status'] === 'verified' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)' ?>; color: <?= $s['status'] === 'verified' ? '#10b981' : '#f59e0b' ?>;">
+                                <i class="fas <?= $s['status'] === 'verified' ? 'fa-check-circle' : 'fa-clock' ?>"></i>
+                                <?= ucfirst($s['status']) ?>
+                            </span>
+                        </td>
+                        <td style="color: var(--admin-text-muted); font-size: 0.8rem;"><?= date('M d, Y', strtotime($s['subscribed_at'])) ?></td>
+                        <td style="text-align: right;">
+                            <form action="<?= SITE_URL ?>/admin/subscribers/<?= $s['id'] ?>/delete" method="POST" onsubmit="return confirm('Remove this subscriber from the list?');">
+                                <button type="submit" class="btn-icon delete"><i class="fas fa-user-minus"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    <?php endforeach; endif; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-<?php require __DIR__ . '/../layout/footer.php'; ?>
+<?php require dirname(__DIR__) . '/layout/footer.php'; ?>
