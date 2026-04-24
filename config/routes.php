@@ -47,6 +47,14 @@ $router->post('admin/subcategories/{id}/delete', 'AdminSubcategoryController@del
 // Roles & Permissions
 $router->get('admin/roles', 'RolesController@index');
 
+// Breaking News Ticker
+$router->get('admin/breaking', 'BreakingController@index');
+$router->post('admin/breaking/store', 'BreakingController@store');
+$router->post('admin/breaking/promote', 'BreakingController@promote');
+$router->get('admin/breaking/add-article/{id}', 'BreakingController@addFromArticle');
+$router->get('admin/breaking/{id}/toggle', 'BreakingController@toggle');
+$router->post('admin/breaking/{id}/delete', 'BreakingController@delete');
+
 // Catch-all for other admin routes to prevent falling through to public routes
 $router->get('admin/{any}', 'AuthController@loginForm');
 

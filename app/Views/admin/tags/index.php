@@ -33,9 +33,9 @@ require __DIR__ . '/../layout/header.php';
                             <td><?= $tag['id'] ?></td>
                             <td style="font-weight: 700; color: var(--admin-primary);"><?= htmlspecialchars($tag['name']) ?></td>
                             <td><span class="badge">/<?= htmlspecialchars($tag['slug']) ?></span></td>
-                            <td><span class="badge" style="background:#e2e8f0; color:#475569;"><?= $tag['category_name'] ?? 'N/A' ?></span></td>
-                            <td><span class="badge" style="background:#f1f5f9; color:#64748b;"><?= $tag['subcategory_name'] ?? 'N/A' ?></span></td>
-                            <td><span class="badge" style="text-transform: uppercase;"><?= $tag['lang'] ?></span></td>
+                            <td><span class="badge" style="background: rgba(255,255,255,0.05); color: var(--admin-text-muted);"><?= $tag['category_name'] ?? 'N/A' ?></span></td>
+                            <td><span class="badge" style="background: rgba(255,255,255,0.03); color: var(--admin-text-muted);"><?= $tag['subcategory_name'] ?? 'N/A' ?></span></td>
+                            <td><span class="badge" style="text-transform: uppercase; background: rgba(204, 34, 34, 0.1); color: var(--admin-primary);"><?= $tag['lang'] ?></span></td>
                             <td>
                                 <div class="action-group">
                                     <a href="<?= SITE_URL ?>/admin/tags/<?= $tag['id'] ?>/edit" class="btn-icon" title="Edit"><i class="fas fa-edit"></i></a>

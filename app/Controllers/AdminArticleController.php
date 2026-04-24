@@ -59,8 +59,27 @@ class AdminArticleController extends BaseController {
             $articleModel = new ArticleModel();
             
             $title = $_POST['title'] ?? '';
+            if (mb_strlen($title) < 20) {
+                die("Error: Article headline must be at least 20 characters long.");
+            }
+
             $slug = !empty($_POST['slug']) ? SlugHelper::create($_POST['slug']) : SlugHelper::create($title);
             
+            $featuredImageId = null;
+            if (!empty($_FILES['image']['name'])) {
+                try {
+                    $uploadResult = ImageHelper::processUpload($_FILES['image']);
+                    
+                    // Save to media table
+                    $db = \Core\Database::getInstance();
+                    $stmt = $db->prepare("INSERT INTO media (path, type) VALUES (:path, 'image')");
+                    $stmt->execute([':path' => $uploadResult['path']]);
+                    $featuredImageId = $db->lastInsertId();
+                } catch (\Exception $e) {
+                    // Log error or show message
+                }
+            }
+
             $data = [
                 ':title' => $title,
                 ':slug' => $slug,
@@ -72,7 +91,7 @@ class AdminArticleController extends BaseController {
                 ':lang' => $_POST['lang'] ?? 'pa',
                 ':status' => $_POST['status'] ?? 'draft',
                 ':priority' => $_POST['priority'] ?? 'normal',
-                ':featured_image' => null,
+                ':featured_image' => $featuredImageId,
                 ':seo_title' => $_POST['seo_title'] ?? $title,
                 ':meta_desc' => $_POST['meta_desc'] ?? '',
                 ':published_at' => ($_POST['status'] === 'published') ? date('Y-m-d H:i:s') : null
@@ -133,7 +152,12 @@ class AdminArticleController extends BaseController {
         $subModel = new SubcategoryModel();
         $tagModel = new TagModel();
         
-        $stmt = \Core\Database::getInstance()->prepare("SELECT * FROM articles WHERE id = :id");
+        $stmt = \Core\Database::getInstance()->prepare("
+            SELECT a.*, m.path AS image_path 
+            FROM articles a 
+            LEFT JOIN media m ON a.featured_image = m.id 
+            WHERE a.id = :id
+        ");
         $stmt->execute([':id' => $id]);
         $article = $stmt->fetch();
 
@@ -161,7 +185,22 @@ class AdminArticleController extends BaseController {
             $articleModel = new ArticleModel();
             
             $title = $_POST['title'] ?? '';
+            if (mb_strlen($title) < 20) {
+                die("Error: Article headline must be at least 20 characters long.");
+            }
+
             $slug = !empty($_POST['slug']) ? SlugHelper::create($_POST['slug']) : SlugHelper::create($title);
+
+            $featuredImageId = $_POST['current_featured_image'] ?? null;
+            if (!empty($_FILES['image']['name'])) {
+                try {
+                    $uploadResult = ImageHelper::processUpload($_FILES['image']);
+                    $db = \Core\Database::getInstance();
+                    $stmt = $db->prepare("INSERT INTO media (path, type) VALUES (:path, 'image')");
+                    $stmt->execute([':path' => $uploadResult['path']]);
+                    $featuredImageId = $db->lastInsertId();
+                } catch (\Exception $e) {}
+            }
 
             $data = [
                 'title' => $title,
@@ -173,6 +212,7 @@ class AdminArticleController extends BaseController {
                 'lang' => $_POST['lang'] ?? 'pa',
                 'status' => $_POST['status'] ?? 'draft',
                 'priority' => $_POST['priority'] ?? 'normal',
+                'featured_image' => $featuredImageId,
                 'seo_title' => $_POST['seo_title'] ?? '',
                 'meta_desc' => $_POST['meta_desc'] ?? '',
                 'updated_at' => date('Y-m-d H:i:s')

@@ -91,6 +91,10 @@
         <a href="<?= SITE_URL ?>/admin/roles" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/roles') !== false ? 'active' : '' ?>">
             <i class="fas fa-user-shield"></i> Roles & Permissions
         </a>
+        
+        <a href="<?= SITE_URL ?>/admin/breaking" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/breaking') !== false ? 'active' : '' ?>">
+            <i class="fas fa-bolt"></i> Breaking News
+        </a>
 
         <!-- Other modules (kept if they exist in controllers, but user wanted simplified) -->
         <?php if (isset($show_all_modules) && $show_all_modules): ?>

@@ -17,10 +17,10 @@
         <header class="admin-top-nav">
             <div class="user-profile">
                 <div style="text-align: right; margin-right: 12px;">
-                    <span style="display:block; font-weight: 700; font-size: 0.9rem;">Admin User</span>
-                    <span style="display:block; font-size: 0.75rem; color: #a0aec0;">Super Authority</span>
+                    <span style="display:block; font-weight: 700; font-size: 0.9rem; color: #fff;">Admin User</span>
+                    <span style="display:block; font-size: 0.75rem; color: var(--admin-text-muted);">Super Authority</span>
                 </div>
-                <div class="user-avatar" style="background: var(--admin-primary); color: white; display:flex; align-items:center; justify-content:center; font-weight:900;">A</div>
+                <div class="user-avatar" style="background: var(--admin-primary); color: white; display:flex; align-items:center; justify-content:center; font-weight:900; border-radius: 12px;">A</div>
             </div>
         </header>
         <main>

@@ -16,26 +16,17 @@ require __DIR__ . '/../layout/header.php';
                 </div>
             </header>
 
-<<<<<<< HEAD
-            <div style="display: grid; grid-template-columns: 1fr 380px; gap: 40px;">
-                <div class="admin-panel-box">
-                    <div class="form-group">
-                        <label for="title" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--admin-primary);">Headline</label>
-                        <input type="text" id="title" name="title" class="form-control" style="font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; padding: 15px 0; border: none; border-bottom: 3px solid #eee; border-radius: 0; background: transparent; outline: none;" placeholder="Start writing your headline..." required>
-                    </div>
-                    
-                    <div class="form-group" style="margin-top: 30px;">
-                        <label for="body" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: block;">Story Content</label>
-                        <div id="editor" style="min-height: 400px; border-radius: 8px;"></div>
-                        <textarea id="body" name="body" style="display:none;"></textarea>
-=======
             <div class="form-grid">
                 <!-- Left Column: Content -->
                 <div class="main-content">
                     <div class="admin-card">
                         <div class="form-group">
-                            <label for="title">Article Headline</label>
-                            <input type="text" id="title" name="title" class="form-control form-control-lg" placeholder="Enter attention-grabbing headline..." required>
+                            <label for="title" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--admin-primary);">Article Headline</label>
+                            <input type="text" id="title" name="title" class="form-control form-control-lg" style="font-size: 32px; font-weight: 900; background: transparent; border: none; border-bottom: 2px solid var(--admin-border); border-radius: 0; padding-left: 0; padding-right: 0;" placeholder="Enter attention-grabbing headline..." minlength="20" title="Headline must be at least 20 characters long" required>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                                <small style="color: var(--admin-text-muted); font-size: 0.75rem; letter-spacing: 0.5px;">Minimum 20 characters for a quality headline</small>
+                                <small id="title-counter" style="color: var(--admin-text-muted); font-size: 0.75rem; font-weight: 600;">0 characters</small>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -44,16 +35,15 @@ require __DIR__ . '/../layout/header.php';
                         </div>
                         
                         <div class="form-group">
-                            <label for="body">Article Content</label>
-                            <div id="editor"></div>
+                            <label for="body" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: block;">Story Content</label>
+                            <div id="editor" style="min-height: 400px; border-radius: 12px; overflow: hidden;"></div>
                             <textarea id="body" name="body" style="display:none;"></textarea>
                         </div>
 
                         <div class="form-group" style="margin-top: 24px;">
                             <label for="excerpt">Short Excerpt / Deck</label>
-                            <textarea id="excerpt" name="excerpt" class="form-control" style="min-height: 80px;" placeholder="Brief summary (1-2 sentences)..."></textarea>
+                            <textarea id="excerpt" name="excerpt" class="form-control" style="min-height: 100px;" placeholder="Brief summary (1-2 sentences)..."></textarea>
                         </div>
->>>>>>> 9e9032b84e151c0f9a91fe29fe09371cd58a83a1
                     </div>
 
                     <div class="admin-card">
@@ -77,13 +67,6 @@ require __DIR__ . '/../layout/header.php';
 
                 <!-- Right Column: Settings -->
                 <div class="side-content">
-                    <div class="admin-card">
-                        <h3>Publishing Options</h3>
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <button type="submit" name="status" value="draft" class="btn btn-secondary" style="width: 100%; justify-content: center;">SAVE DRAFT</button>
-                            <button type="submit" name="status" value="published" class="btn btn-primary" style="width: 100%; justify-content: center;">PUBLISH</button>
-                        </div>
-                    </div>
 
                     <div class="admin-card">
                         <h3>Article Settings</h3>
@@ -142,12 +125,30 @@ require __DIR__ . '/../layout/header.php';
 
                     <div class="admin-card">
                         <h3>Featured Image</h3>
-                        <div id="image-preview" style="width: 100%; height: 160px; background: #f8fafc; border-radius: 10px; border: 2px dashed #e2e8f0; display: flex; align-items: center; justify-content: center; flex-direction: column; cursor: pointer;" onclick="document.getElementById('image-upload').click()">
-                            <i class="fas fa-camera" style="font-size: 24px; color: #cbd5e0; margin-bottom: 8px;"></i>
-                            <span style="color: #94a3b8; font-size: 0.8rem; font-weight: 600;">Upload Cover Photo</span>
-                            <img id="preview-img" style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                        <div id="image-preview" style="width: 100%; aspect-ratio: 16/9; background: rgba(255,255,255,0.02); border-radius: 12px; border: 2px dashed var(--admin-border); display: flex; align-items: center; justify-content: center; flex-direction: column; cursor: pointer; overflow: hidden;" onclick="document.getElementById('image-upload').click()">
+                            <i class="fas fa-camera" style="font-size: 24px; color: var(--admin-text-muted); margin-bottom: 8px;"></i>
+                            <span style="color: var(--admin-text-muted); font-size: 0.8rem; font-weight: 600;">Upload Cover Photo</span>
+                            <img id="preview-img" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="margin-top: 12px;">
+                            <button type="button" class="btn btn-secondary" style="width: 100%; font-size: 0.8rem; padding: 8px;" onclick="document.getElementById('image-upload').click()">
+                                <i class="fas fa-cloud-upload-alt"></i> SELECT IMAGE
+                            </button>
                         </div>
                         <input type="file" id="image-upload" name="image" style="display: none;" onchange="previewImage(this)">
+                        <small style="display: block; margin-top: 8px; color: var(--admin-text-muted); font-size: 0.7rem; text-align: center;">Recommended: 1200 x 675 (16:9)</small>
+                    </div>
+
+                    <div class="admin-card">
+                        <h3>Publishing Options</h3>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button type="submit" name="status" value="draft" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+                                <i class="fas fa-save"></i> SAVE DRAFT
+                            </button>
+                            <button type="submit" name="status" value="published" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                                <i class="fas fa-paper-plane"></i> PUBLISH
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -180,9 +181,18 @@ require __DIR__ . '/../layout/header.php';
         }
     }
 
-    // Auto-generate Slug from Title
+    // Auto-generate Slug from Title and update Char Counter
     document.getElementById('title').addEventListener('input', function() {
         const title = this.value;
+        const charCount = title.length;
+        
+        // Update Counter UI
+        const counter = document.getElementById('title-counter');
+        if (counter) {
+            counter.textContent = `${charCount} characters`;
+            counter.style.color = charCount < 20 ? 'var(--admin-primary)' : 'var(--admin-text-muted)';
+        }
+
         const slug = title.toLowerCase()
             .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
             .replace(/(^-|-$)/g, '');    // Remove leading/trailing hyphens

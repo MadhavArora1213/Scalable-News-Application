@@ -50,6 +50,7 @@
                         <td><?= date('M d, Y', strtotime($art['created_at'])) ?></td>
                         <td>
                             <div class="action-group">
+                                <a href="<?= SITE_URL ?>/admin/breaking/add-article/<?= $art['id'] ?>" class="btn-icon" title="Add to Ticker" style="color: #facc15;"><i class="fas fa-bolt"></i></a>
                                 <a href="<?= SITE_URL ?>/admin/articles/<?= $art['id'] ?>/edit" class="btn-icon" title="Edit"><i class="fas fa-edit"></i></a>
                                 <form action="<?= SITE_URL ?>/admin/articles/<?= $art['id'] ?>/delete" method="POST" onsubmit="return confirm('Truly delete this article?');" style="display:inline;">
                                     <button type="submit" class="btn-icon delete"><i class="fas fa-trash"></i></button>
