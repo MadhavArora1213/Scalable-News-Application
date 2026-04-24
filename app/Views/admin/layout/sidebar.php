@@ -96,6 +96,10 @@
             <i class="fas fa-bolt"></i> Breaking News
         </a>
 
+        <a href="<?= SITE_URL ?>/admin/settings" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/settings') !== false ? 'active' : '' ?>">
+            <i class="fas fa-sliders-h"></i> Settings
+        </a>
+
         <!-- Other modules (kept if they exist in controllers, but user wanted simplified) -->
         <?php if (isset($show_all_modules) && $show_all_modules): ?>
             <a href="<?= SITE_URL ?>/admin/categories" class="nav-link <?= str_contains($_SERVER['REQUEST_URI'], 'categories') ? 'active' : '' ?>">

@@ -1,168 +1,118 @@
-<?php 
-require __DIR__ . '/../layout/header.php'; 
-?>
+<?php require dirname(__DIR__) . '/layout/header.php'; ?>
 
 <div class="admin-content">
-    <div class="admin-container" style="max-width: 1000px;">
+    <form action="<?= SITE_URL ?>/admin/settings/update" method="POST" enctype="multipart/form-data">
         <header class="content-header">
-            <h1><i class="fas fa-cogs"></i> System & Site Configuration</h1>
+            <h1><i class="fas fa-sliders-h" style="color: var(--admin-primary); margin-right: 10px;"></i> Site Configuration</h1>
             <div class="header-actions">
-                <button type="button" class="btn btn-primary" onclick="saveSettings()">
-                    <i class="fas fa-save"></i> SAVE ALL CONFIG
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> APPLY CHANGES
                 </button>
             </div>
         </header>
 
-        <form action="#" method="POST">
-            <!-- Branding Section -->
-            <div class="admin-panel-box" style="margin-bottom: 30px;">
-                <div class="box-header">
-                    <h3><i class="fas fa-palette"></i> Branding & Aesthetics</h3>
-                </div>
-                <div style="padding: 30px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-                        <div class="form-group">
-                            <label>Primary Brand Color</label>
-                            <div style="display: flex; gap: 15px; align-items: center;">
-                                <div style="position: relative; width: 60px; height: 60px; border-radius: 12px; overflow: hidden; border: 1px solid #ddd;">
-                                    <input type="color" id="primary-color" name="primary_color" value="#CC2222" 
-                                           style="position: absolute; inset: -10px; width: 100px; height: 100px; border: none; cursor: pointer;" 
-                                           oninput="updateBrandPreview(this.value)">
-                                </div>
-                                <input type="text" class="form-control" id="primary-color-text" value="#CC2222" style="font-family: monospace; font-weight: 700; width: 120px;" oninput="updateBrandPreview(this.value)">
-                            </div>
-                            <p style="font-size: 0.8rem; color: #718096; margin-top: 10px;">Determines the look of buttons, links, and sidebar highlights.</p>
-                        </div>
-                        <div class="form-group">
-                            <label>Accent Secondary Color</label>
-                            <div style="display: flex; gap: 15px; align-items: center;">
-                                <div style="position: relative; width: 60px; height: 60px; border-radius: 12px; overflow: hidden; border: 1px solid #ddd;">
-                                    <input type="color" name="accent_color" value="#E67E22" style="position: absolute; inset: -10px; width: 100px; height: 100px; border: none; cursor: pointer;">
-                                </div>
-                                <input type="text" class="form-control" value="#E67E22" style="font-family: monospace; font-weight: 700; width: 120px;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Social Links -->
-            <div class="admin-panel-box" style="margin-bottom: 30px;">
-                <div class="box-header">
-                    <h3><i class="fas fa-share-alt"></i> Social Media Ecosystem</h3>
-                </div>
-                <div style="padding: 30px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-                        <div class="form-group">
-                            <label><i class="fab fa-youtube" style="color: #ff0000;"></i> YouTube Channel</label>
-                            <input type="text" class="form-control" value="https://youtube.com/@khabran">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fab fa-twitter" style="color: #1DA1F2;"></i> Twitter Portfolio</label>
-                            <input type="text" class="form-control" value="https://twitter.com/khabran">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram Handle</label>
-                            <input type="text" class="form-control" value="https://instagram.com/khabran">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook Community</label>
-                            <input type="text" class="form-control" value="https://facebook.com/khabran">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
-                <!-- System settings -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            
+            <!-- General & Branding -->
+            <div style="display: flex; flex-direction: column; gap: 30px;">
                 <div class="admin-panel-box">
                     <div class="box-header">
-                        <h3><i class="fas fa-server"></i> Server Operations</h3>
+                        <h3><i class="fas fa-home"></i> Basic Website Info</h3>
                     </div>
-                    <div style="padding:30px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-                            <div>
-                                <strong style="display:block;">Maintenance Mode</strong>
-                                <small style="color:#718096;">Shut down frontend for visitors.</small>
-                            </div>
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider round"></span>
-                            </label>
+                    <div style="padding: 25px;">
+                        <div class="form-group">
+                            <label>Website Name</label>
+                            <input type="text" name="settings[site_name]" class="form-control" value="<?= htmlspecialchars($settings['general']['site_name'] ?? '') ?>" placeholder="e.g. Khabran News">
                         </div>
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
-                            <div>
-                                <strong style="display:block;">Debug Mode</strong>
-                                <small style="color:#718096;">Show PHP error logs on screen.</small>
+                        <div class="form-group">
+                            <label>Short Description (Tagline)</label>
+                            <input type="text" name="settings[site_tagline]" class="form-control" value="<?= htmlspecialchars($settings['general']['site_tagline'] ?? '') ?>" placeholder="e.g. Punjab's No.1 News Site">
+                        </div>
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label>Main Logo</label>
+                            <div style="display: flex; gap: 20px; align-items: center; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border: 1px dashed var(--admin-border);">
+                                <div style="width: 100px; height: 50px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                    <?php if(!empty($settings['general']['site_logo'])): ?>
+                                        <img src="<?= SITE_URL . $settings['general']['site_logo'] ?>" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                    <?php else: ?>
+                                        <i class="fas fa-image" style="color: var(--admin-text-muted);"></i>
+                                    <?php endif; ?>
+                                </div>
+                                <div>
+                                    <input type="file" name="site_logo" style="font-size: 0.75rem; color: var(--admin-text-muted);">
+                                    <p style="font-size: 0.65rem; color: var(--admin-text-muted); margin-top: 5px;">Upload your logo here. PNG works best.</p>
+                                </div>
                             </div>
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span class="slider round"></span>
-                            </label>
                         </div>
                     </div>
                 </div>
 
-                <!-- Contact Info -->
                 <div class="admin-panel-box">
                     <div class="box-header">
-                        <h3><i class="fas fa-headset"></i> Support & Contact</h3>
+                        <h3><i class="fas fa-search"></i> Google & Search Info (SEO)</h3>
                     </div>
-                    <div style="padding: 30px;">
+                    <div style="padding: 25px;">
                         <div class="form-group">
-                            <label>Official Support Email</label>
-                            <input type="email" class="form-control" value="info@khabran.com">
+                            <label>About the Website (for Search Engines)</label>
+                            <textarea name="settings[meta_description]" class="form-control" style="min-height: 80px; font-size: 0.85rem;"><?= htmlspecialchars($settings['seo']['meta_description'] ?? '') ?></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Hotline Number</label>
-                            <input type="text" class="form-control" value="+91 98765-43210">
+                            <label>Keywords (comma separated)</label>
+                            <input type="text" name="settings[meta_keywords]" class="form-control" value="<?= htmlspecialchars($settings['seo']['meta_keywords'] ?? '') ?>" placeholder="e.g. punjab, news, politics">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Footer & Info -->
-            <div class="admin-panel-box">
-                <div class="box-header">
-                    <h3><i class="fas fa-info-circle"></i> Footer & Public Info</h3>
-                </div>
-                <div style="padding: 30px;">
-                    <div class="form-group">
-                        <label>Site Name (Display)</label>
-                        <input type="text" class="form-control" value="ਖ਼ਬਰਾਂ News Portal">
+            <!-- Social & Contact -->
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                <div class="admin-panel-box">
+                    <div class="box-header">
+                        <h3><i class="fas fa-heart"></i> Social Media Pages</h3>
                     </div>
-                    <div class="form-group">
-                        <label>Footer Description (Punjabi)</label>
-                        <textarea class="form-control" style="min-height: 120px;">ਖ਼ਬਰਾਂ ਪੰਜਾਬ ਦਾ ਨੰਬਰ 1 ਨਿਊਜ਼ ਪੋਰਟਲ ਹੈ। ਅਸੀਂ ਤੁਹਾਨੂੰ ਪੰਜਾਬ, ਭਾਰਤ ਅਤੇ ਦੁਨੀਆ ਭਰ ਦੀਆਂ ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ ਪ੍ਰਦਾਨ ਕਰਦੇ ਹਾਂ।</textarea>
+                    <div style="padding: 25px;">
+                        <div class="form-group" style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 40px; color: #ff0000; font-size: 1.2rem; text-align: center;"><i class="fab fa-youtube"></i></div>
+                            <input type="text" name="settings[youtube_url]" class="form-control" value="<?= htmlspecialchars($settings['social']['youtube_url'] ?? '') ?>" placeholder="Enter YouTube Link">
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 40px; color: #1877F2; font-size: 1.2rem; text-align: center;"><i class="fab fa-facebook"></i></div>
+                            <input type="text" name="settings[facebook_url]" class="form-control" value="<?= htmlspecialchars($settings['social']['facebook_url'] ?? '') ?>" placeholder="Enter Facebook Link">
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 40px; color: #E1306C; font-size: 1.2rem; text-align: center;"><i class="fab fa-instagram"></i></div>
+                            <input type="text" name="settings[instagram_url]" class="form-control" value="<?= htmlspecialchars($settings['social']['instagram_url'] ?? '') ?>" placeholder="Enter Instagram Link">
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 40px; color: #1DA1F2; font-size: 1.2rem; text-align: center;"><i class="fab fa-twitter"></i></div>
+                            <input type="text" name="settings[twitter_url]" class="form-control" value="<?= htmlspecialchars($settings['social']['twitter_url'] ?? '') ?>" placeholder="Enter X (Twitter) Link">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-panel-box">
+                    <div class="box-header">
+                        <h3><i class="fas fa-envelope"></i> Contact Details</h3>
+                    </div>
+                    <div style="padding: 25px;">
+                        <div class="form-group">
+                            <label>Official Email</label>
+                            <input type="email" name="settings[support_email]" class="form-control" value="<?= htmlspecialchars($settings['contact']['support_email'] ?? '') ?>" placeholder="e.g. info@khabran.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Office Address</label>
+                            <textarea name="settings[office_address]" class="form-control" style="min-height: 60px; font-size: 0.85rem;"><?= htmlspecialchars($settings['contact']['office_address'] ?? '') ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Bottom Copyright Text</label>
+                            <input type="text" name="settings[copyright_text]" class="form-control" value="<?= htmlspecialchars($settings['general']['copyright_text'] ?? '') ?>" placeholder="e.g. © 2026 Khabran News. All rights reserved.">
+                        </div>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
+
+        </div>
+    </form>
 </div>
 
-<style>
-/* Switch Toggle Styling */
-.switch { position: relative; display: inline-block; width: 46px; height: 24px; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e0; transition: .4s; border-radius: 24px; }
-.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-input:checked + .slider { background-color: var(--admin-primary); }
-input:checked + .slider:before { transform: translateX(22px); }
-</style>
-
-<script>
-    function updateBrandPreview(color) {
-        document.documentElement.style.setProperty('--primary', color);
-        document.getElementById('primary-color').value = color;
-        document.getElementById('primary-color-text').value = color;
-    }
-
-    function saveSettings() {
-        const color = document.getElementById('primary-color').value;
-        localStorage.setItem('site-primary-color', color);
-        alert('Global Settings Saved Successfully!');
-    }
-</script>
-
-<?php require __DIR__ . '/../layout/footer.php'; ?>
+<?php require dirname(__DIR__) . '/layout/footer.php'; ?>

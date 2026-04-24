@@ -2,99 +2,117 @@
 
 <div class="admin-content">
     <header class="content-header">
-        <h1><i class="fas fa-bolt" style="color: #facc15;"></i> Breaking News Ticker Manager</h1>
+        <h1><i class="fas fa-bolt" style="color: #facc15; margin-right: 10px;"></i> Breaking News Ticker</h1>
+        <p style="color: var(--admin-text-muted); font-size: 0.85rem; margin-top: 5px;">Create and manage the scrolling news bar at the top of your website.</p>
     </header>
 
-    <div style="display: grid; grid-template-columns: 400px 1fr; gap: 30px; align-items: start;">
+    <div style="display: grid; grid-template-columns: 450px 1fr; gap: 30px; align-items: start;">
+        
+        <!-- Action Panel -->
         <div style="display: flex; flex-direction: column; gap: 25px;">
-            <!-- Option A: Promote Existing Article -->
-            <div class="admin-panel-box">
-                <div class="box-header">
-                    <h3><i class="fas fa-file-alt"></i> Option A: Promote Article</h3>
+            
+            <div class="admin-panel-box" style="border: 1px solid rgba(255,255,255,0.05);">
+                <div class="box-header" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px 20px;">
+                    <h3 style="font-size: 0.9rem; letter-spacing: 0.5px; color: #fff;">ADD NEW ALERT</h3>
                 </div>
-                <div style="padding: 20px;">
-                    <p style="font-size: 0.75rem; color: var(--admin-text-muted); margin-bottom: 15px;">Select a recently published article to add to the live ticker.</p>
+                
+                <div style="padding: 25px;">
+                    <!-- Manual Entry -->
+                    <form action="<?= SITE_URL ?>/admin/breaking/store" method="POST" style="margin-bottom: 30px;">
+                        <label style="display: block; font-size: 0.75rem; color: var(--admin-primary); margin-bottom: 10px; font-weight: 700;">Type your news here:</label>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <textarea name="headline" class="form-control" style="min-height: 70px; background: rgba(0,0,0,0.2); border: 1px solid var(--admin-border); font-size: 0.9rem;" placeholder="Write a short headline here..." required></textarea>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                            <select name="lang" class="form-control" style="background: rgba(0,0,0,0.2); border: 1px solid var(--admin-border);">
+                                <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                                <option value="hi">हिन्दी (Hindi)</option>
+                                <option value="en">English</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary" style="justify-content: center; font-size: 0.8rem;">
+                                <i class="fas fa-plus"></i> ADD TO BAR
+                            </button>
+                        </div>
+                    </form>
+
+                    <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 25px 0;"></div>
+
+                    <!-- Promote Article -->
                     <form action="<?= SITE_URL ?>/admin/breaking/promote" method="POST">
-                        <div class="form-group">
-                            <label style="color: var(--admin-primary); font-size: 0.75rem; text-transform: uppercase;">Recent Articles</label>
-                            <select name="article_id" class="form-control" required>
-                                <option value="">-- Choose Article --</option>
+                        <label style="display: block; font-size: 0.75rem; color: var(--admin-primary); margin-bottom: 10px; font-weight: 700;">Or pick from recent articles:</label>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <select name="article_id" class="form-control" style="background: rgba(0,0,0,0.2); border: 1px solid var(--admin-border); font-size: 0.85rem;" required>
+                                <option value="">-- Select an Article --</option>
                                 <?php foreach($recentArticles as $art): ?>
                                     <option value="<?= $art['id'] ?>"><?= htmlspecialchars($art['title']) ?> (<?= strtoupper($art['lang']) ?>)</option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                            <i class="fas fa-plus"></i> ADD TO TICKER
+                        <button type="submit" class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 0.8rem;">
+                            <i class="fas fa-check"></i> USE THIS ARTICLE
                         </button>
                     </form>
                 </div>
             </div>
 
-            <!-- Option B: Manual Ticker Item -->
-            <div class="admin-panel-box">
-                <div class="box-header">
-                    <h3><i class="fas fa-edit"></i> Option B: Custom Headline</h3>
-                </div>
-                <form action="<?= SITE_URL ?>/admin/breaking/store" method="POST" style="padding: 20px;">
-                    <div class="form-group">
-                        <label style="color: var(--admin-primary); font-size: 0.75rem; text-transform: uppercase;">Headline Text</label>
-                        <textarea name="headline" class="form-control" style="min-height: 80px; font-weight: 600;" placeholder="e.g. Traffic alert in Amritsar..." required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label style="color: var(--admin-primary); font-size: 0.75rem; text-transform: uppercase;">Language</label>
-                        <select name="lang" class="form-control">
-                            <option value="pa">ਪੰਜਾਬੀ</option>
-                            <option value="hi">हिन्दी</option>
-                            <option value="en">English</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-secondary" style="width: 100%; justify-content: center;">
-                        <i class="fas fa-bullhorn"></i> PUSH CUSTOM ALERT
-                    </button>
-                </form>
+            <div style="padding: 20px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                <h4 style="font-size: 0.75rem; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-lightbulb" style="color: #facc15;"></i> Helpful Tips
+                </h4>
+                <ul style="padding-left: 18px; color: var(--admin-text-muted); font-size: 0.75rem; line-height: 1.6;">
+                    <li>Keep headlines short so they scroll faster.</li>
+                    <li>The top items will show up first on the website.</li>
+                    <li>You can pause any item without deleting it.</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Ticker List -->
-        <div class="admin-panel-box">
-            <div class="box-header">
-                <h3>Currently Scrolling Items</h3>
+        <!-- Monitoring Panel -->
+        <div class="admin-panel-box" style="border: 1px solid rgba(255,255,255,0.05);">
+            <div class="box-header" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px 20px;">
+                <h3 style="font-size: 0.9rem; letter-spacing: 0.5px; color: #fff;">CURRENT BREAKING NEWS</h3>
             </div>
+            
             <div class="table-responsive">
                 <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>Headline</th>
-                            <th>Language</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th style="padding-left: 20px;">HEADLINE</th>
+                            <th>LANGUAGE</th>
+                            <th>STATUS</th>
+                            <th style="text-align: right; padding-right: 20px;">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if(empty($items)): ?>
-                            <tr><td colspan="4" style="text-align:center; padding: 40px; color: var(--admin-text-muted);">No alerts active in the ticker.</td></tr>
+                            <tr><td colspan="4" style="text-align:center; padding: 60px; color: var(--admin-text-muted); font-size: 0.85rem;">No breaking news right now.</td></tr>
                         <?php else: foreach($items as $item): ?>
                         <tr>
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="width: 8px; height: 8px; background: <?= $item['is_active'] ? '#22c55e' : '#64748b' ?>; border-radius: 50%; box-shadow: <?= $item['is_active'] ? '0 0 10px rgba(34, 197, 94, 0.4)' : 'none' ?>;"></div>
-                                    <strong style="font-size: 0.9rem;"><?= htmlspecialchars($item['headline']) ?></strong>
+                            <td style="padding-left: 20px;">
+                                <div style="max-width: 400px; line-height: 1.4;">
+                                    <strong style="font-size: 0.85rem; color: #eee;"><?= htmlspecialchars($item['headline']) ?></strong>
+                                    <?php if($item['url'] !== '#'): ?>
+                                        <div style="font-size: 0.65rem; color: var(--admin-primary); margin-top: 4px;">Link: <?= $item['url'] ?></div>
+                                    <?php endif; ?>
                                 </div>
                             </td>
-                            <td><span class="badge" style="text-transform: uppercase;"><?= $item['lang'] ?></span></td>
+                            <td><span style="font-size: 0.7rem; font-weight: 800; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; color: var(--admin-text-muted);"><?= strtoupper($item['lang']) ?></span></td>
                             <td>
-                                <span class="status-pill <?= $item['is_active'] ? 'published' : 'draft' ?>">
-                                    <?= $item['is_active'] ? 'Active' : 'Paused' ?>
-                                </span>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 6px; height: 6px; background: <?= $item['is_active'] ? '#10b981' : '#475569' ?>; border-radius: 50%; <?= $item['is_active'] ? 'box-shadow: 0 0 10px #10b981;' : '' ?>"></div>
+                                    <span style="font-size: 0.75rem; color: <?= $item['is_active'] ? '#10b981' : 'var(--admin-text-muted)' ?>; font-weight: 600;">
+                                        <?= $item['is_active'] ? 'SHOWING' : 'HIDDEN' ?>
+                                    </span>
+                                </div>
                             </td>
-                            <td>
-                                <div class="action-group">
-                                    <a href="<?= SITE_URL ?>/admin/breaking/<?= $item['id'] ?>/toggle" class="btn-icon" title="<?= $item['is_active'] ? 'Pause' : 'Activate' ?>">
-                                        <i class="fas <?= $item['is_active'] ? 'fa-pause' : 'fa-play' ?>"></i>
+                            <td style="text-align: right; padding-right: 20px;">
+                                <div class="action-group" style="justify-content: flex-end;">
+                                    <a href="<?= SITE_URL ?>/admin/breaking/<?= $item['id'] ?>/toggle" class="btn-icon" title="<?= $item['is_active'] ? 'Hide from website' : 'Show on website' ?>">
+                                        <i class="fas <?= $item['is_active'] ? 'fa-eye-slash' : 'fa-eye' ?>" style="font-size: 0.75rem;"></i>
                                     </a>
-                                    <form action="<?= SITE_URL ?>/admin/breaking/<?= $item['id'] ?>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Remove this from ticker?');">
-                                        <button type="submit" class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                    <form action="<?= SITE_URL ?>/admin/breaking/<?= $item['id'] ?>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Delete this news?');">
+                                        <button type="submit" class="btn-icon delete"><i class="fas fa-trash-alt" style="font-size: 0.75rem;"></i></button>
                                     </form>
                                 </div>
                             </td>
@@ -102,9 +120,6 @@
                         <?php endforeach; endif; ?>
                     </tbody>
                 </table>
-            </div>
-            <div style="margin-top: 25px; padding: 15px; background: rgba(245, 158, 11, 0.05); border-radius: 8px; border-left: 4px solid #f59e0b; font-size: 0.85rem; color: #d97706;">
-                <i class="fas fa-info-circle"></i> <strong>Pro-tip:</strong> Keep headlines under 100 characters for best scrolling performance.
             </div>
         </div>
     </div>

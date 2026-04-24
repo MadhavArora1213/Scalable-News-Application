@@ -1,0 +1,37 @@
+That is a great question. When building a **Scalable, Professional News Portal**, the difference between a simple blog and a top-tier news site (like BBC or NDTV) lies in these "extra" tables.
+
+Here is why those additional tables are essential for your project:
+
+### 1. `article_translations` (The "Multi-lingual" Engine)
+Since your site supports **Punjabi, Hindi, and English**, this table is the "brain" that links them. 
+*   **Why you need it**: Without this, if a user is reading an article in Punjabi and clicks the "Hindi" button, the site won't know which Hindi article corresponds to the Punjabi one. This table ensures a seamless language-switching experience.
+
+### 2. `media` (The "Central Library")
+Instead of just saving a filename in the `articles` table, we use a central `media` table.
+*   **Why you need it**: 
+    *   **SEO**: Stores `alt_text` for Google Image search.
+    *   **Credits**: News sites must legally show photo credits (e.g., "Photo by Reuters").
+    *   **Efficiency**: You can reuse the same image for multiple articles without uploading it twice.
+
+### 3. `breaking_news` (The "Ticker")
+*   **Why you need it**: This controls the scrolling "Red Bar" at the top of your site. It allows you to quickly add urgent alerts that aren't full articles yet.
+
+### 4. `settings` (The "Control Panel")
+*   **Why you need it**: This stores your Site Name, Logo, Social Media links, and SEO Meta tags. It allows you to change your site title or logo from the Admin Panel without touching a single line of code.
+
+### 5. `redirects` (The "SEO Insurance")
+*   **Why you need it**: If you change an article's slug later, the old link shared on WhatsApp or Facebook will break (404 error). This table automatically "redirects" users to the new URL, so you never lose traffic or Google ranking.
+
+### 6. `ad_zones` (The "Revenue Generator")
+*   **Why you need it**: News sites survive on ads. This table lets you manage AdSense codes or local sponsor banners in specific spots (Sidebar, Header, Middle of Article) easily.
+
+### 7. `push_subscribers` & `subscribers` (The "Engagement" Tool)
+*   **Why you need it**: Standard email `subscribers` are for newsletters. `push_subscribers` are for **Browser Notifications**. When a big story breaks, you can send a "ding" directly to your readers' phones or laptops.
+
+### 8. `page_views` (The "Analytics" Engine)
+*   **Why you need it**: This allows you to create a **"Trending Now"** or **"Most Popular"** section on your homepage by counting real-time traffic.
+
+### Summary:
+While you *could* start with just the basic tables, these additional ones turn your website from a simple list of posts into a **Feature-Rich News Platform** that can compete with professional news organizations. 
+
+**My Recommendation**: We should keep them, as they provide the "premium" feel and functionality you requested! Do you want to focus on any specific one of these next?

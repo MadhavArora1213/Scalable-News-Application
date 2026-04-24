@@ -55,6 +55,10 @@ $router->get('admin/breaking/add-article/{id}', 'BreakingController@addFromArtic
 $router->get('admin/breaking/{id}/toggle', 'BreakingController@toggle');
 $router->post('admin/breaking/{id}/delete', 'BreakingController@delete');
 
+// Site Settings
+$router->get('admin/settings', 'SettingsController@index');
+$router->post('admin/settings/update', 'SettingsController@update');
+
 // Catch-all for other admin routes to prevent falling through to public routes
 $router->get('admin/{any}', 'AuthController@loginForm');
 
