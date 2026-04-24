@@ -158,8 +158,8 @@ class ArticleModel {
      */
     public function save(array $data): int {
         $stmt = $this->db->prepare(
-            "INSERT INTO articles (title, slug, body, excerpt, author_id, category_id, lang, status, priority, featured_image, seo_title, meta_desc, published_at) 
-             VALUES (:title, :slug, :body, :excerpt, :author_id, :category_id, :lang, :status, :priority, :featured_image, :seo_title, :meta_desc, :published_at)"
+            "INSERT INTO articles (title, slug, body, excerpt, author_id, category_id, subcategory_id, lang, status, priority, featured_image, seo_title, meta_desc, published_at) 
+             VALUES (:title, :slug, :body, :excerpt, :author_id, :category_id, :subcategory_id, :lang, :status, :priority, :featured_image, :seo_title, :meta_desc, :published_at)"
         );
         $stmt->execute($data);
         return (int)$this->db->lastInsertId();

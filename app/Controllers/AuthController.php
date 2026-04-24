@@ -29,7 +29,7 @@ class AuthController extends BaseController {
                     'email' => $email,
                     'role' => 'super_admin'
                 ];
-                header('Location: /news/Scalable-News-Application/admin/dashboard');
+                header('Location: /News_Website/admin/dashboard');
                 exit;
             } else {
                 $this->render('admin/auth/login', [
@@ -45,7 +45,7 @@ class AuthController extends BaseController {
             session_start();
         }
         session_destroy();
-        header('Location: /news/Scalable-News-Application/admin/login');
+        header('Location: /News_Website/admin/login');
         exit;
     }
 }

@@ -25,8 +25,19 @@ class CategoryModel {
     }
     
     public function save(array $data): int {
-        $stmt = $this->db->prepare("INSERT INTO categories (name_pa, name_hi, name_en, slug, parent_id, sort_order) VALUES (:name_pa, :name_hi, :name_en, :slug, :parent_id, :sort_order)");
+        $stmt = $this->db->prepare("INSERT INTO categories (name_pa, name_hi, name_en, slug, sort_order) VALUES (:name_pa, :name_hi, :name_en, :slug, :sort_order)");
         $stmt->execute($data);
         return (int)$this->db->lastInsertId();
+    }
+
+    public function update(int $id, array $data): bool {
+        $stmt = $this->db->prepare("UPDATE categories SET name_pa = :name_pa, name_hi = :name_hi, name_en = :name_en, slug = :slug, sort_order = :sort_order WHERE id = :id");
+        $data['id'] = $id;
+        return $stmt->execute($data);
+    }
+
+    public function delete(int $id): bool {
+        $stmt = $this->db->prepare("DELETE FROM categories WHERE id = :id");
+        return $stmt->execute([':id' => $id]);
     }
 }

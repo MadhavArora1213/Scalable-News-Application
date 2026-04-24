@@ -1,6 +1,6 @@
 <?php
 
-define('SITE_URL', 'http://localhost/news/Scalable-News-Application');
+define('SITE_URL', 'http://localhost/News_Website');
 define('PUBLIC_PATH', dirname(__DIR__) . '/public');
 
 return [

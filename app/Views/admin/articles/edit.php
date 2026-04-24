@@ -5,7 +5,7 @@ require __DIR__ . '/../layout/header.php';
 <!-- TinyMCE -->
 <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
-<form action="/news/Scalable-News-Application/admin/articles/<?= $article['id'] ?>/update" method="POST" enctype="multipart/form-data">
+<form action="/News_Website/admin/articles/<?= $article['id'] ?>/update" method="POST" enctype="multipart/form-data">
     <div style="display: grid; grid-template-columns: 1fr 350px; gap: 24px;">
         <div class="card">
             <div class="card-header">
@@ -15,6 +15,11 @@ require __DIR__ . '/../layout/header.php';
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" id="title" name="title" class="form-control" style="font-size: 24px; font-weight: 700; padding: 16px;" value="<?= htmlspecialchars($article['title']) ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="slug">URL Slug</label>
+                    <input type="text" id="slug" name="slug" class="form-control" value="<?= htmlspecialchars($article['slug']) ?>" readonly>
                 </div>
                 
                 <div class="form-group">
@@ -62,16 +67,26 @@ require __DIR__ . '/../layout/header.php';
                     <div class="form-group">
                         <label for="lang">Language</label>
                         <select name="lang" id="lang" class="form-control">
-                            <option value="pa" <?= $article['lang'] === 'pa' ? 'selected' : '' ?>>Punjabi (ਪੰਜਾਬੀ)</option>
-                            <option value="hi" <?= $article['lang'] === 'hi' ? 'selected' : '' ?>>Hindi (हिन्दी)</option>
+                            <option value="pa" <?= $article['lang'] === 'pa' ? 'selected' : '' ?>>Punjabi (à¨ªà©°à¨œà¨¾à¨¬à©€)</option>
+                            <option value="hi" <?= $article['lang'] === 'hi' ? 'selected' : '' ?>>Hindi (à¤¹à¤¿à¤¨à¥à¤¦à¥€)</option>
                             <option value="en" <?= $article['lang'] === 'en' ? 'selected' : '' ?>>English</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="category_id">Category</label>
                         <select name="category_id" id="category_id" class="form-control">
+                            <option value="">-- Select Category --</option>
                             <?php foreach($categories as $cat): ?>
-                                <option value="<?= $cat['id'] ?>" <?= $article['category_id'] == $cat['id'] ? 'selected' : '' ?>><?= htmlspecialchars($cat['name_en']) ?> (<?= $cat['name_pa'] ?>)</option>
+                                <option value="<?= $cat['id'] ?>" <?= $article['category_id'] == $cat['id'] ? 'selected' : '' ?>><?= htmlspecialchars($cat['name_en']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="subcategory_id">Subcategory</label>
+                        <select name="subcategory_id" id="subcategory_id" class="form-control">
+                            <option value="">-- Select Subcategory --</option>
+                            <?php foreach($subcategories as $sub): ?>
+                                <option value="<?= $sub['id'] ?>" data-parent="<?= $sub['category_id'] ?>" <?= $article['subcategory_id'] == $sub['id'] ? 'selected' : '' ?> style="<?= $article['category_id'] == $sub['category_id'] ? 'display:block;' : 'display:none;' ?>"><?= htmlspecialchars($sub['name_en']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -103,6 +118,27 @@ require __DIR__ . '/../layout/header.php';
                     </div>
                 </div>
             </div>
+
+            <!-- Tags Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 style="font-size: 16px;">Article Tags</h3>
+                </div>
+                <div style="padding: 20px;">
+                    <div class="tags-selector-box">
+                        <?php foreach($tags as $tag): ?>
+                        <label class="tag-checkbox-item">
+                            <input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>" <?= in_array($tag['id'], $selectedTags) ? 'checked' : '' ?>>
+                            <span><?= htmlspecialchars($tag['name']) ?></span>
+                        </label>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label style="font-size: 0.75rem;">Add New Tags (comma separated)</label>
+                        <input type="text" name="custom_tags" class="form-control" placeholder="e.g. Health, Sports, Punjab">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </form>
@@ -114,6 +150,33 @@ require __DIR__ . '/../layout/header.php';
         toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         height: 600,
         menubar: false
+    });
+
+    // Auto-generate Slug from Title
+    document.getElementById('title').addEventListener('input', function() {
+        const title = this.value;
+        const slug = title.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
+            .replace(/(^-|-$)/g, '');    // Remove leading/trailing hyphens
+        document.getElementById('slug').value = slug;
+    });
+
+    // Dynamic Subcategory Filtering
+    document.getElementById('category_id').addEventListener('change', function() {
+        const categoryId = this.value;
+        const subSelect = document.getElementById('subcategory_id');
+        const options = subSelect.querySelectorAll('option');
+        
+        subSelect.value = ""; // Reset subcategory
+        
+        options.forEach(opt => {
+            if (opt.value === "") return;
+            if (opt.getAttribute('data-parent') === categoryId) {
+                opt.style.display = "block";
+            } else {
+                opt.style.display = "none";
+            }
+        });
     });
 </script>
 

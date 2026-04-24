@@ -56,7 +56,7 @@ class Router {
 
             if (method_exists($controller, $action)) {
                 // Call the action with parameters unpacked
-                call_user_func_array([$controller, $action], $params);
+                call_user_func_array([$controller, $action], array_values($params));
             } else {
                 die("Method $action not found in controller $fullControllerName");
             }

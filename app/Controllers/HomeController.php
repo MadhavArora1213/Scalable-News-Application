@@ -22,7 +22,7 @@ class HomeController extends BaseController {
     public function lang(string $lang) {
         // Validate language
         if (!in_array($lang, ['pa', 'hi', 'en'])) {
-            header('Location: /news/Scalable-News-Application/pa');
+            header('Location: /News_Website/pa');
             exit;
         }
 
@@ -87,7 +87,7 @@ class HomeController extends BaseController {
         }
         if (empty($economy)) {
             $economy = [
-                ['title' => 'GST collections reach a record high of ₹2 Lakh Crore', 'slug' => '#', 'image_path' => ''],
+                ['title' => 'GST collections reach a record high of â‚¹2 Lakh Crore', 'slug' => '#', 'image_path' => ''],
                 ['title' => 'Ludhiana knitwear industry sees surge in winter exports', 'slug' => '#', 'image_path' => ''],
                 ['title' => 'Tech startups in Mohali secure $50M in seed funding', 'slug' => '#', 'image_path' => '']
             ];

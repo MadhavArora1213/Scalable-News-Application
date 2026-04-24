@@ -13,7 +13,7 @@ class AuthMiddleware {
 
         if (empty($_SESSION['admin_user'])) {
             // Check remember-me cookie logic would go here
-            header('Location: /news/Scalable-News-Application/admin/login');
+            header('Location: /News_Website/admin/login');
             exit;
         }
 

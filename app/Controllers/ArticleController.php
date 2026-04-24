@@ -10,6 +10,11 @@ class ArticleController extends BaseController {
      * Show a single article
      */
     public function show(string $lang, string $category, string $slug): void {
+        if (!in_array($lang, ['pa', 'hi', 'en'])) {
+            http_response_code(404);
+            die("404 - Invalid Language");
+        }
+
         $model = new ArticleModel();
         
         // Find the article

@@ -5,6 +5,8 @@ namespace App\Controllers;
 use Core\BaseController;
 use App\Models\ArticleModel;
 use App\Models\CategoryModel;
+use App\Models\SubcategoryModel;
+use App\Models\TagModel;
 use App\Helpers\SlugHelper;
 use App\Helpers\ImageHelper;
 use App\Middleware\AuthMiddleware;
@@ -17,13 +19,17 @@ class AdminArticleController extends BaseController {
 
     public function index() {
         $model = new ArticleModel();
-        // Get all articles across all languages for admin view
+        // Get all articles with tags grouped
         $stmt = \Core\Database::getInstance()->prepare(
-            "SELECT a.*, u.name AS author_name, c.name_en AS category_name, m.path AS image_path 
+            "SELECT a.*, u.name AS author_name, c.name_en AS category_name, m.path AS image_path,
+                    GROUP_CONCAT(t.name SEPARATOR ', ') AS tag_list
              FROM articles a 
              LEFT JOIN users u ON a.author_id = u.id 
              LEFT JOIN categories c ON a.category_id = c.id 
              LEFT JOIN media m ON a.featured_image = m.id 
+             LEFT JOIN article_tags at ON a.id = at.article_id
+             LEFT JOIN tags t ON at.tag_id = t.id
+             GROUP BY a.id
              ORDER BY a.created_at DESC LIMIT 100"
         );
         $stmt->execute();
@@ -37,9 +43,14 @@ class AdminArticleController extends BaseController {
 
     public function create() {
         $catModel = new CategoryModel();
+        $subModel = new SubcategoryModel();
+        $tagModel = new TagModel();
+
         $this->render('admin/articles/create', [
             'title' => 'Write New Article',
-            'categories' => $catModel->getAll()
+            'categories' => $catModel->getAll(),
+            'subcategories' => $subModel->getAll(),
+            'tags' => $tagModel->getAll()
         ]);
     }
 
@@ -56,7 +67,8 @@ class AdminArticleController extends BaseController {
                 ':body' => $_POST['body'] ?? '',
                 ':excerpt' => $_POST['excerpt'] ?? '',
                 ':author_id' => $_SESSION['admin_user']['id'],
-                ':category_id' => $_POST['category_id'] ?? 1,
+                ':category_id' => $_POST['category_id'] ?? null,
+                ':subcategory_id' => $_POST['subcategory_id'] ?: null,
                 ':lang' => $_POST['lang'] ?? 'pa',
                 ':status' => $_POST['status'] ?? 'draft',
                 ':priority' => $_POST['priority'] ?? 'normal',
@@ -66,13 +78,51 @@ class AdminArticleController extends BaseController {
                 ':published_at' => ($_POST['status'] === 'published') ? date('Y-m-d H:i:s') : null
             ];
 
-            // Image process placeholder
-            if (!empty($_FILES['image']['tmp_name'])) {
-                // In real world: process image, save to media table, get ID
+            $articleId = $articleModel->save($data);
+
+            // Sync Selected Tags
+            $selectedTags = $_POST['tags'] ?? [];
+            
+            // Process Custom Tags
+            if (!empty($_POST['custom_tags'])) {
+                $customTags = explode(',', $_POST['custom_tags']);
+                $tagModel = new TagModel();
+                $db = \Core\Database::getInstance();
+                
+                foreach ($customTags as $tagName) {
+                    $tagName = trim($tagName);
+                    if (empty($tagName)) continue;
+                    
+                    // Check if tag exists
+                    $stmt = $db->prepare("SELECT id FROM tags WHERE LOWER(name) = LOWER(:name) LIMIT 1");
+                    $stmt->execute([':name' => $tagName]);
+                    $existing = $stmt->fetch();
+                    
+                    if ($existing) {
+                        $selectedTags[] = $existing['id'];
+                    } else {
+                        // Create new tag
+                        $newTagId = $tagModel->save([
+                            ':name' => $tagName,
+                            ':slug' => SlugHelper::create($tagName),
+                            ':lang' => $data[':lang']
+                        ]);
+                        $selectedTags[] = $newTagId;
+                    }
+                }
             }
 
-            $articleModel->save($data);
-            header('Location: /news/Scalable-News-Application/admin/articles');
+            // Sync all tags to article_tags
+            if (!empty($selectedTags)) {
+                $db = \Core\Database::getInstance();
+                $selectedTags = array_unique($selectedTags);
+                foreach ($selectedTags as $tagId) {
+                    $stmt = $db->prepare("INSERT IGNORE INTO article_tags (article_id, tag_id) VALUES (:article_id, :tag_id)");
+                    $stmt->execute([':article_id' => $articleId, ':tag_id' => $tagId]);
+                }
+            }
+
+            header('Location: ' . SITE_URL . '/admin/articles');
             exit;
         }
     }
@@ -80,6 +130,8 @@ class AdminArticleController extends BaseController {
     public function edit($id) {
         $articleModel = new ArticleModel();
         $catModel = new CategoryModel();
+        $subModel = new SubcategoryModel();
+        $tagModel = new TagModel();
         
         $stmt = \Core\Database::getInstance()->prepare("SELECT * FROM articles WHERE id = :id");
         $stmt->execute([':id' => $id]);
@@ -89,10 +141,18 @@ class AdminArticleController extends BaseController {
             die("Article not found");
         }
 
+        // Get currently selected tags
+        $stmt = \Core\Database::getInstance()->prepare("SELECT tag_id FROM article_tags WHERE article_id = :id");
+        $stmt->execute([':id' => $id]);
+        $selectedTags = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
         $this->render('admin/articles/edit', [
             'title' => 'Edit Article',
             'article' => $article,
-            'categories' => $catModel->getAll()
+            'categories' => $catModel->getAll(),
+            'subcategories' => $subModel->getAll(),
+            'tags' => $tagModel->getAll(),
+            'selectedTags' => $selectedTags
         ]);
     }
 
@@ -100,11 +160,16 @@ class AdminArticleController extends BaseController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $articleModel = new ArticleModel();
             
+            $title = $_POST['title'] ?? '';
+            $slug = !empty($_POST['slug']) ? SlugHelper::create($_POST['slug']) : SlugHelper::create($title);
+
             $data = [
-                'title' => $_POST['title'] ?? '',
+                'title' => $title,
+                'slug' => $slug,
                 'body' => $_POST['body'] ?? '',
                 'excerpt' => $_POST['excerpt'] ?? '',
-                'category_id' => $_POST['category_id'] ?? 1,
+                'category_id' => $_POST['category_id'] ?? null,
+                'subcategory_id' => $_POST['subcategory_id'] ?: null,
                 'lang' => $_POST['lang'] ?? 'pa',
                 'status' => $_POST['status'] ?? 'draft',
                 'priority' => $_POST['priority'] ?? 'normal',
@@ -118,7 +183,48 @@ class AdminArticleController extends BaseController {
             }
 
             $articleModel->update($id, $data);
-            header('Location: /news/Scalable-News-Application/admin/articles');
+
+            // Update Tags
+            $db = \Core\Database::getInstance();
+            $db->prepare("DELETE FROM article_tags WHERE article_id = :id")->execute([':id' => $id]);
+            
+            $selectedTags = $_POST['tags'] ?? [];
+            
+            // Process Custom Tags
+            if (!empty($_POST['custom_tags'])) {
+                $customTags = explode(',', $_POST['custom_tags']);
+                $tagModel = new TagModel();
+                
+                foreach ($customTags as $tagName) {
+                    $tagName = trim($tagName);
+                    if (empty($tagName)) continue;
+                    
+                    $stmt = $db->prepare("SELECT id FROM tags WHERE LOWER(name) = LOWER(:name) LIMIT 1");
+                    $stmt->execute([':name' => $tagName]);
+                    $existing = $stmt->fetch();
+                    
+                    if ($existing) {
+                        $selectedTags[] = $existing['id'];
+                    } else {
+                        $newTagId = $tagModel->save([
+                            ':name' => $tagName,
+                            ':slug' => SlugHelper::create($tagName),
+                            ':lang' => $data['lang']
+                        ]);
+                        $selectedTags[] = $newTagId;
+                    }
+                }
+            }
+
+            if (!empty($selectedTags)) {
+                $selectedTags = array_unique($selectedTags);
+                foreach ($selectedTags as $tagId) {
+                    $db->prepare("INSERT IGNORE INTO article_tags (article_id, tag_id) VALUES (:article_id, :tag_id)")
+                       ->execute([':article_id' => $id, ':tag_id' => $tagId]);
+                }
+            }
+
+            header('Location: ' . SITE_URL . '/admin/articles');
             exit;
         }
     }
@@ -127,7 +233,7 @@ class AdminArticleController extends BaseController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $articleModel = new ArticleModel();
             $articleModel->delete($id);
-            header('Location: /news/Scalable-News-Application/admin/articles');
+            header('Location: /News_Website/admin/articles');
             exit;
         }
     }
