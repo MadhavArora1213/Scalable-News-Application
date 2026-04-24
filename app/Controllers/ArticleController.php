@@ -37,12 +37,19 @@ class ArticleController extends BaseController {
         $analyticsModel = new \App\Models\AnalyticsModel();
         $analyticsModel->recordView($article['id']);
 
-        // Language translations (Mockup for now)
-        $translations = [
-            ['lang' => 'pa', 'url' => "/pa/{$category}/{$slug}"],
-            ['lang' => 'hi', 'url' => "/hi/{$category}/{$slug}"],
-            ['lang' => 'en', 'url' => "/en/{$category}/{$slug}"],
-        ];
+        // Language translations
+        $translationModel = new \App\Models\TranslationModel();
+        $translatedUrls = $translationModel->getTranslatedUrls($article['id']);
+        
+        $translations = [];
+        foreach (['pa', 'hi', 'en'] as $l) {
+            if (isset($translatedUrls[$l])) {
+                $translations[] = ['lang' => $l, 'url' => SITE_URL . $translatedUrls[$l]];
+            } else {
+                // If no direct translation, link to home of that language
+                $translations[] = ['lang' => $l, 'url' => SITE_URL . "/{$l}"];
+            }
+        }
 
         // Render the view
         $this->render('frontend/article', [

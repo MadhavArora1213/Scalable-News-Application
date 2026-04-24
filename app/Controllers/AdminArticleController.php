@@ -176,7 +176,9 @@ class AdminArticleController extends BaseController {
             'categories' => $catModel->getAll(),
             'subcategories' => $subModel->getAll(),
             'tags' => $tagModel->getAll(),
-            'selectedTags' => $selectedTags
+            'selectedTags' => $selectedTags,
+            'translations' => (new \App\Models\TranslationModel())->getLinks($id),
+            'allArticles' => $articleModel->getAll() // Simplest way to get list for linking
         ]);
     }
 
@@ -233,6 +235,19 @@ class AdminArticleController extends BaseController {
             }
 
             $articleModel->update($id, $data);
+
+            // Handle Language Connections
+            $transModel = new \App\Models\TranslationModel();
+            $paId = $_POST['trans_pa'] ?: null;
+            $hiId = $_POST['trans_hi'] ?: null;
+            $enId = $_POST['trans_en'] ?: null;
+
+            // Automatically include current article in its own slot if it matches language
+            if ($data['lang'] == 'pa') $paId = $id;
+            if ($data['lang'] == 'hi') $hiId = $id;
+            if ($data['lang'] == 'en') $enId = $id;
+
+            $transModel->linkArticles($paId, $hiId, $enId);
 
             // Handle SEO Redirects if URL changed
             if ($oldArticle && $data['status'] === 'published') {

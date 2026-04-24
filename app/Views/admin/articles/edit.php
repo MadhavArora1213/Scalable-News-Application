@@ -123,6 +123,47 @@ require __DIR__ . '/../layout/header.php';
                     </div>
 
                     <div class="admin-card">
+                        <h3><i class="fas fa-link"></i> Language Connections</h3>
+                        <p style="font-size: 0.7rem; color: var(--admin-text-muted); margin-bottom: 15px;">Link this article to its versions in other languages.</p>
+                        
+                        <div class="form-group">
+                            <label style="font-size: 0.7rem; color: #ffcc00;">Punjabi Version</label>
+                            <select name="trans_pa" class="form-control" style="font-size: 0.8rem;">
+                                <option value="">-- No Link --</option>
+                                <?php foreach($allArticles as $a): if($a['lang'] == 'pa'): ?>
+                                    <option value="<?= $a['id'] ?>" <?= (($translations['pa_id'] ?? 0) == $a['id'] || ($article['lang'] == 'pa' && $article['id'] == $a['id'])) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($a['title']) ?>
+                                    </option>
+                                <?php endif; endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-size: 0.7rem; color: #ffcc00;">Hindi Version</label>
+                            <select name="trans_hi" class="form-control" style="font-size: 0.8rem;">
+                                <option value="">-- No Link --</option>
+                                <?php foreach($allArticles as $a): if($a['lang'] == 'hi'): ?>
+                                    <option value="<?= $a['id'] ?>" <?= (($translations['hi_id'] ?? 0) == $a['id'] || ($article['lang'] == 'hi' && $article['id'] == $a['id'])) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($a['title']) ?>
+                                    </option>
+                                <?php endif; endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-size: 0.7rem; color: #ffcc00;">English Version</label>
+                            <select name="trans_en" class="form-control" style="font-size: 0.8rem;">
+                                <option value="">-- No Link --</option>
+                                <?php foreach($allArticles as $a): if($a['lang'] == 'en'): ?>
+                                    <option value="<?= $a['id'] ?>" <?= (($translations['en_id'] ?? 0) == $a['id'] || ($article['lang'] == 'en' && $article['id'] == $a['id'])) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($a['title']) ?>
+                                    </option>
+                                <?php endif; endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="admin-card">
                         <h3>Featured Image</h3>
                         <div id="image-preview" style="width: 100%; aspect-ratio: 16/9; background: rgba(255,255,255,0.02); border-radius: 12px; border: 2px dashed var(--admin-border); display: flex; align-items: center; justify-content: center; flex-direction: column; cursor: pointer; overflow: hidden; position: relative;" onclick="document.getElementById('image-upload').click()">
                             <?php if(!empty($article['image_path'])): ?>
