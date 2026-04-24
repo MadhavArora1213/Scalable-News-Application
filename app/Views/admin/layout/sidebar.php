@@ -100,6 +100,10 @@
             <i class="fas fa-sliders-h"></i> Settings
         </a>
 
+        <a href="<?= SITE_URL ?>/admin/redirects" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/redirects') !== false ? 'active' : '' ?>">
+            <i class="fas fa-random"></i> Redirects
+        </a>
+
         <!-- Other modules (kept if they exist in controllers, but user wanted simplified) -->
         <?php if (isset($show_all_modules) && $show_all_modules): ?>
             <a href="<?= SITE_URL ?>/admin/categories" class="nav-link <?= str_contains($_SERVER['REQUEST_URI'], 'categories') ? 'active' : '' ?>">

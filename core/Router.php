@@ -38,6 +38,15 @@ class Router {
             }
         }
 
+        // Check for SEO Redirects before 404
+        $redirectModel = new \App\Models\RedirectModel();
+        $newUrl = $redirectModel->find($url);
+        if ($newUrl) {
+            header("HTTP/1.1 301 Moved Permanently");
+            header("Location: " . SITE_URL . "/" . ltrim($newUrl, '/'));
+            exit;
+        }
+
         http_response_code(404);
         $errorView = dirname(__DIR__) . '/app/Views/errors/404.php';
         if (is_readable($errorView)) {

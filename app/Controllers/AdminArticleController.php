@@ -183,7 +183,18 @@ class AdminArticleController extends BaseController {
     public function update($id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $articleModel = new ArticleModel();
+            $db = \Core\Database::getInstance();
             
+            // Get old data for redirect check
+            $stmt = $db->prepare("
+                SELECT a.slug, a.lang, c.slug as cat_slug 
+                FROM articles a 
+                LEFT JOIN categories c ON a.category_id = c.id 
+                WHERE a.id = :id
+            ");
+            $stmt->execute([':id' => $id]);
+            $oldArticle = $stmt->fetch();
+
             $title = $_POST['title'] ?? '';
             if (mb_strlen($title) < 20) {
                 die("Error: Article headline must be at least 20 characters long.");
@@ -195,7 +206,6 @@ class AdminArticleController extends BaseController {
             if (!empty($_FILES['image']['name'])) {
                 try {
                     $uploadResult = ImageHelper::processUpload($_FILES['image']);
-                    $db = \Core\Database::getInstance();
                     $stmt = $db->prepare("INSERT INTO media (path, type) VALUES (:path, 'image')");
                     $stmt->execute([':path' => $uploadResult['path']]);
                     $featuredImageId = $db->lastInsertId();
@@ -223,6 +233,21 @@ class AdminArticleController extends BaseController {
             }
 
             $articleModel->update($id, $data);
+
+            // Handle SEO Redirects if URL changed
+            if ($oldArticle && $data['status'] === 'published') {
+                $stmt = $db->prepare("SELECT slug FROM categories WHERE id = :id");
+                $stmt->execute([':id' => $data['category_id']]);
+                $newCatSlug = $stmt->fetchColumn();
+
+                $oldUrl = "{$oldArticle['lang']}/{$oldArticle['cat_slug']}/{$oldArticle['slug']}";
+                $newUrl = "{$data['lang']}/{$newCatSlug}/{$data['slug']}";
+
+                if ($oldUrl !== $newUrl) {
+                    $redirectModel = new \App\Models\RedirectModel();
+                    $redirectModel->create($oldUrl, $newUrl);
+                }
+            }
 
             // Update Tags
             $db = \Core\Database::getInstance();

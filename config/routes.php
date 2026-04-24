@@ -59,6 +59,11 @@ $router->post('admin/breaking/{id}/delete', 'BreakingController@delete');
 $router->get('admin/settings', 'SettingsController@index');
 $router->post('admin/settings/update', 'SettingsController@update');
 
+// URL Redirects
+$router->get('admin/redirects', 'RedirectController@index');
+$router->post('admin/redirects/store', 'RedirectController@store');
+$router->post('admin/redirects/{id}/delete', 'RedirectController@delete');
+
 // Catch-all for other admin routes to prevent falling through to public routes
 $router->get('admin/{any}', 'AuthController@loginForm');
 

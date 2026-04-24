@@ -13,14 +13,9 @@ Instead of just saving a filename in the `articles` table, we use a central `med
     *   **Credits**: News sites must legally show photo credits (e.g., "Photo by Reuters").
     *   **Efficiency**: You can reuse the same image for multiple articles without uploading it twice.
 
-### 3. `breaking_news` (The "Ticker")
-*   **Why you need it**: This controls the scrolling "Red Bar" at the top of your site. It allows you to quickly add urgent alerts that aren't full articles yet.
 
-### 4. `settings` (The "Control Panel")
-*   **Why you need it**: This stores your Site Name, Logo, Social Media links, and SEO Meta tags. It allows you to change your site title or logo from the Admin Panel without touching a single line of code.
 
-### 5. `redirects` (The "SEO Insurance")
-*   **Why you need it**: If you change an article's slug later, the old link shared on WhatsApp or Facebook will break (404 error). This table automatically "redirects" users to the new URL, so you never lose traffic or Google ranking.
+
 
 ### 6. `ad_zones` (The "Revenue Generator")
 *   **Why you need it**: News sites survive on ads. This table lets you manage AdSense codes or local sponsor banners in specific spots (Sidebar, Header, Middle of Article) easily.
