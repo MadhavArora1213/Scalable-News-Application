@@ -7,8 +7,8 @@
                 <h3><?= $lang == 'pa' ? 'ਸਾਡੇ ਨਾਲ ਜੁੜੋ' : ($lang == 'hi' ? 'हमारे साथ जुड़ें' : 'Stay Connected') ?></h3>
                 <p><?= $lang == 'pa' ? 'ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ ਸਿੱਧਾ ਆਪਣੇ ਇਨਬਾਕਸ ਵਿੱਚ ਪ੍ਰਾਪਤ ਕਰੋ' : ($lang == 'hi' ? 'ताज़ा खबरें सीधे अपने इनबॉक्स में प्राप्त करें' : 'Get the latest news directly in your inbox') ?></p>
             </div>
-            <form class="newsletter-form">
-                <input type="email" placeholder="email@example.com" required>
+            <form action="<?= SITE_URL ?>/subscribe" method="POST" class="newsletter-form">
+                <input type="email" name="email" placeholder="email@example.com" required>
                 <button type="submit"><?= $lang == 'pa' ? 'ਸਬਸਕ੍ਰਾਈਬ' : ($lang == 'hi' ? 'सब्सक्राइब' : 'SUBSCRIBE') ?></button>
             </form>
         </div>

@@ -15,13 +15,13 @@ require __DIR__ . '/../layout/header.php';
             <div style="display: grid; grid-template-columns: 1fr 380px; gap: 40px;">
                 <div class="admin-panel-box">
                     <div class="form-group">
-                        <label for="title">Article Headline</label>
-                        <input type="text" id="title" name="title" class="form-control" style="font-size: 28px; font-weight: 800; padding: 20px; border: none; border-bottom: 2px solid #eee; border-radius: 0; background: transparent;" placeholder="Enter attention-grabbing headline..." required>
+                        <label for="title" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--admin-primary);">Headline</label>
+                        <input type="text" id="title" name="title" class="form-control" style="font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; padding: 15px 0; border: none; border-bottom: 3px solid #eee; border-radius: 0; background: transparent; outline: none;" placeholder="Start writing your headline..." required>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="body">Article Content</label>
-                        <div id="editor"></div>
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label for="body" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: block;">Story Content</label>
+                        <div id="editor" style="min-height: 400px; border-radius: 8px;"></div>
                         <textarea id="body" name="body" style="display:none;"></textarea>
                     </div>
 

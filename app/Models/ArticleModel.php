@@ -65,7 +65,7 @@ class ArticleModel {
      */
     public function findBySlug(string $slug, string $lang): ?array {
         $stmt = $this->db->prepare(
-            "SELECT a.*, u.name AS author_name, c.name_{$lang} AS category_name, m.path AS image_path
+            "SELECT a.*, u.name AS author_name, c.name_{$lang} AS category_name, c.slug AS category_slug, m.path AS image_path
              FROM articles a 
              LEFT JOIN users u ON a.author_id = u.id
              LEFT JOIN categories c ON a.category_id = c.id
@@ -88,9 +88,10 @@ class ArticleModel {
      */
     public function getRelated(int $articleId, int $categoryId, int $limit = 3): array {
         $stmt = $this->db->prepare(
-            "SELECT a.id, a.title, a.slug, c.slug AS category_slug 
+            "SELECT a.id, a.title, a.slug, c.slug AS category_slug, m.path AS image_path
              FROM articles a
              JOIN categories c ON a.category_id = c.id
+             LEFT JOIN media m ON a.featured_image = m.id
              WHERE a.category_id = :category_id AND a.id != :id AND a.status = 'published'
              ORDER BY a.published_at DESC LIMIT :limit"
         );

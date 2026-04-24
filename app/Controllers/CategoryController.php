@@ -17,12 +17,20 @@ class CategoryController extends BaseController {
         $articles = $articleModel->getLatestByCategory($category, $lang, 12, 0);
         
         if (empty($articles)) {
+            // Fetch category name from database since we don't have articles to infer it from
+            $db = \Core\Database::getInstance();
+            $stmt = $db->prepare("SELECT name_{$lang} as name FROM categories WHERE slug = ?");
+            $stmt->execute([$category]);
+            $catData = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $realName = $catData ? $catData['name'] : ucfirst(str_replace('-', ' ', $category));
+
             // Handle empty category or invalid slug
             $this->render('frontend/category', [
                 'articles' => [],
-                'category_name' => ucfirst($category),
+                'category_name' => $realName,
+                'category_slug' => $category,
                 'lang' => $lang,
-                'title' => ucfirst($category) . ' - The Khabran'
+                'title' => $realName . ' - The Khabran'
             ]);
             return;
         }
@@ -33,6 +41,7 @@ class CategoryController extends BaseController {
         $this->render('frontend/category', [
             'articles' => $articles,
             'category_name' => $categoryName,
+            'category_slug' => $category, // Pass the slug for URL generation
             'lang' => $lang,
             'title' => $categoryName . ' - The Khabran'
         ]);

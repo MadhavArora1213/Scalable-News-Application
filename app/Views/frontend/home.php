@@ -6,7 +6,7 @@
             <?php if($hero): ?>
             <article class="featured">
                 <a href="<?= SITE_URL ?>/<?=$lang?>/<?=$hero['category_id']?>/<?=$hero['slug']?>" style="text-decoration:none; color:inherit;">
-                    <div class="card-thumb hero-thumb" style="background: url('<?= SITE_URL ?>/<?= $hero['image_path'] ?>') center/cover;"></div>
+                    <div class="card-thumb hero-thumb" style="background-image: url('<?= (strpos($hero['image_path'], 'http') === 0) ? $hero['image_path'] : SITE_URL . '/' . $hero['image_path'] ?>'); background-position: center; background-size: cover;"></div>
                     <span class="card-label"><?= htmlspecialchars($hero['category_name']) ?></span>
                     <h1 class="card-title"><?= htmlspecialchars($hero['title']) ?></h1>
                     <p class="card-excerpt"><?= htmlspecialchars($hero['excerpt']) ?></p>
@@ -21,7 +21,7 @@
             <div class="sidebar-list">
                 <?php foreach($latest as $item): ?>
                 <a href="<?= SITE_URL ?>/<?=$lang?>/<?=$item['category_id']?>/<?=$item['slug']?>" class="article-card mini">
-                    <div class="card-thumb" style="width: 100px; height: 60px; <?= $item['image_path'] ? 'background: url('.SITE_URL.'/'.$item['image_path'].') center/cover;' : '' ?>"></div>
+                    <div class="card-thumb" style="width: 100px; height: 60px; background-image: <?= !empty($item['image_path']) ? ((strpos($item['image_path'], 'http') === 0) ? 'url(\''.$item['image_path'].'\')' : 'url(\''.SITE_URL.'/'.$item['image_path'].'\')') : 'url(\''.SITE_URL.'/assets/images/default-news.png\')' ?>; background-position: center; background-size: cover;"></div>
                     <div>
                         <span class="card-label"><?= htmlspecialchars($item['category_name']) ?></span>
                         <h3 class="card-title" style="font-size: 1rem;"><?= htmlspecialchars($item['title']) ?></h3>
@@ -51,7 +51,7 @@
             <div class="block-grid">
                 <?php foreach($grid as $item): ?>
                 <a href="<?= SITE_URL ?>/<?=$lang?>/<?=$item['category_id']?>/<?=$item['slug']?>" class="article-card">
-                    <div class="card-thumb" style="<?= $item['image_path'] ? 'background: url('.SITE_URL.'/'.$item['image_path'].') center/cover;' : '' ?>"></div>
+                    <div class="card-thumb" style="background-image: <?= !empty($item['image_path']) ? ((strpos($item['image_path'], 'http') === 0) ? 'url(\''.$item['image_path'].'\')' : 'url(\''.SITE_URL.'/'.$item['image_path'].'\')') : 'url(\''.SITE_URL.'/assets/images/default-news.png\')' ?>; background-position: center; background-size: cover;"></div>
                     <span class="card-label"><?= htmlspecialchars($item['category_name']) ?></span>
                     <h3 class="card-title"><?= htmlspecialchars($item['title']) ?></h3>
                     <div class="card-meta"><?= date('M d, Y', strtotime($item['published_at'])) ?></div>
@@ -73,7 +73,7 @@
                 <?php foreach($opinions as $op): ?>
                 <a href="<?= SITE_URL ?>/<?=$lang?>/opinion/<?=$op['slug']?>" class="opinion-card">
                     <div class="opinion-author">
-                        <img src="<?= SITE_URL ?>/assets/img/avatar.png" alt="Author" class="author-img">
+                        <img src="<?= SITE_URL ?>/assets/images/avatar.png" alt="Author" class="author-img">
                         <div>
                             <span class="author-name"><?= htmlspecialchars($op['author_name'] ?? 'Guest Columnist') ?></span>
                             <span class="author-beat">Journalist</span>
@@ -97,7 +97,7 @@
                 <a href="<?= SITE_URL ?>/<?=$lang?>/ground-reports/<?=$groundReports['slug']?>" class="btn-banner">READ SPECIAL REPORT</a>
             </div>
             <div class="banner-visual">
-                <img src="<?= SITE_URL ?>/assets/img/punjab-map.png" alt="Punjab Map" style="max-width: 400px; opacity: 0.8;">
+                <img src="<?= SITE_URL ?>/assets/images/punjab-map.png" alt="Punjab Map" style="max-width: 400px; opacity: 0.8;">
             </div>
         </div>
     </section>
@@ -114,9 +114,7 @@
                 <div class="split-list">
                     <?php foreach($politics as $p): ?>
                     <a href="<?= SITE_URL ?>/<?=$lang?>/politics/<?=$p['slug']?>" class="article-card mini">
-                        <?php if(!empty($p['image_path'])): ?>
-                            <div class="card-thumb" style="width: 120px; height: 80px; background: url('<?= SITE_URL ?>/<?= $p['image_path'] ?>') center/cover;"></div>
-                        <?php endif; ?>
+                        <div class="card-thumb" style="width: 120px; height: 80px; background-image: <?= !empty($p['image_path']) ? ((strpos($p['image_path'], 'http') === 0) ? 'url(\''.$p['image_path'].'\')' : 'url(\''.SITE_URL.'/'.$p['image_path'].'\')') : 'url(\''.SITE_URL.'/assets/images/default-news.png\')' ?>; background-position: center; background-size: cover;"></div>
                         <div>
                             <h3 class="card-title" style="font-size: 1.1rem;"><?= htmlspecialchars($p['title']) ?></h3>
                         </div>
@@ -135,9 +133,7 @@
                 <div class="split-list">
                     <?php foreach($economy as $e): ?>
                     <a href="<?= SITE_URL ?>/<?=$lang?>/economy/<?=$e['slug']?>" class="article-card mini">
-                        <?php if(!empty($e['image_path'])): ?>
-                            <div class="card-thumb" style="width: 120px; height: 80px; background: url('<?= SITE_URL ?>/<?= $e['image_path'] ?>') center/cover;"></div>
-                        <?php endif; ?>
+                        <div class="card-thumb" style="width: 120px; height: 80px; background-image: <?= !empty($e['image_path']) ? ((strpos($e['image_path'], 'http') === 0) ? 'url(\''.$e['image_path'].'\')' : 'url(\''.SITE_URL.'/'.$e['image_path'].'\')') : 'url(\''.SITE_URL.'/assets/images/default-news.png\')' ?>; background-position: center; background-size: cover;"></div>
                         <div>
                             <h3 class="card-title" style="font-size: 1.1rem;"><?= htmlspecialchars($e['title']) ?></h3>
                         </div>
@@ -159,7 +155,7 @@
                         <div class="play-overlay">
                             <i class="fab fa-youtube"></i>
                         </div>
-                        <img src="<?= SITE_URL ?>/assets/img/video-cover.png" alt="Video Cover" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.4;">
+                        <img src="<?= SITE_URL ?>/assets/images/video-cover.png" alt="Video Cover" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.4;">
                     </div>
                     <div class="video-info-box">
                         <h3>Impact of New Farm Policies on Rural Punjab Districts</h3>
@@ -176,7 +172,7 @@
                     <h4 style="margin: 0 0 20px 0; color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px;">Up Next</h4>
                     
                     <a href="#" class="video-card-mini">
-                        <div class="mini-thumb"></div>
+                        <div class="mini-thumb" style="background-image: url('<?= SITE_URL ?>/assets/images/video-thumb1.png'); background-position: center; background-size: cover;"></div>
                         <div class="mini-content">
                             <span class="v-title">Ludhiana Industrial Hub: Special Ground Report</span>
                             <span class="v-meta">12:45 • News Tech</span>
@@ -184,7 +180,7 @@
                     </a>
 
                     <a href="#" class="video-card-mini">
-                        <div class="mini-thumb"></div>
+                        <div class="mini-thumb" style="background-image: url('<?= SITE_URL ?>/assets/images/video-thumb2.png'); background-position: center; background-size: cover;"></div>
                         <div class="mini-content">
                             <span class="v-title">Exclusive: Interview with Punjab Agriculture Minister</span>
                             <span class="v-meta">24:10 • Politics</span>
@@ -192,7 +188,7 @@
                     </a>
 
                     <a href="#" class="video-card-mini">
-                        <div class="mini-thumb"></div>
+                        <div class="mini-thumb" style="background-image: url('<?= SITE_URL ?>/assets/images/video-thumb3.png'); background-position: center; background-size: cover;"></div>
                         <div class="mini-content">
                             <span class="v-title">Culture & Heritage: The Lost Arts of Amritsar</span>
                             <span class="v-meta">08:12 • Culture</span>

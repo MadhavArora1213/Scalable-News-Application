@@ -1,5 +1,9 @@
 RewriteEngine On
 
+# Sitemaps routing
+RewriteRule ^sitemap-([a-zA-Z0-9_-]+)\.xml$ sitemap.php?type=$1 [L]
+RewriteRule ^sitemap_index\.xml$ sitemap.php?type=index [L]
+
 # Redirect to index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

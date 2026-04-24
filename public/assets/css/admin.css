@@ -1,8 +1,8 @@
 :root {
-    --admin-bg: #f5f7fa;
-    --admin-sidebar: #1a202c;
-    --admin-sidebar-hover: #2d3748;
-    --admin-primary: #CC2222;
+    --admin-bg: #f8f9fa;
+    --admin-sidebar: #1a1209; /* Matches Website Ink Black */
+    --admin-sidebar-hover: #261b0f;
+    --admin-primary: #c0170f; /* Matches Website Crimson */
     --admin-text: #2d3748;
     --admin-border: #e2e8f0;
 }
