@@ -116,15 +116,15 @@ $tr = Core\LanguageHelper::getTranslations($lang);
         $navDb = \Core\Database::getInstance();
         
         // Fetch main categories
-        $navStmt = $navDb->query("SELECT * FROM categories WHERE parent_id IS NULL ORDER BY sort_order ASC, id ASC LIMIT 8");
+        $navStmt = $navDb->query("SELECT * FROM categories ORDER BY sort_order ASC, id ASC LIMIT 8");
         $navCategories = $navStmt->fetchAll(PDO::FETCH_ASSOC);
         
-        // Fetch all subcategories and group them by parent_id
-        $subStmt = $navDb->query("SELECT * FROM categories WHERE parent_id IS NOT NULL ORDER BY sort_order ASC, id ASC");
+        // Fetch all subcategories from the separate subcategories table
+        $subStmt = $navDb->query("SELECT * FROM subcategories ORDER BY sort_order ASC, id ASC");
         $subCategories = $subStmt->fetchAll(PDO::FETCH_ASSOC);
         $subCatGrouped = [];
         foreach($subCategories as $sub) {
-            $subCatGrouped[$sub['parent_id']][] = $sub;
+            $subCatGrouped[$sub['category_id']][] = $sub;
         }
     ?>
     <nav class="main-nav">
