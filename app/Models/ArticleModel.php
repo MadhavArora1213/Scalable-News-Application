@@ -17,7 +17,7 @@ class ArticleModel {
      */
     public function getLatest(string $lang, int $limit = 10, int $offset = 0): array {
         $stmt = $this->db->prepare(
-            "SELECT a.*, u.name AS author_name, c.name_{$lang} AS category_name,
+            "SELECT a.*, u.name AS author_name, c.name_{$lang} AS category_name, c.slug AS category_slug,
                     m.path AS image_path
              FROM articles a
              LEFT JOIN users u ON a.author_id = u.id
@@ -41,7 +41,7 @@ class ArticleModel {
      */
     public function getLatestByCategory(string $categorySlug, string $lang, int $limit = 10, int $offset = 0): array {
         $stmt = $this->db->prepare(
-            "SELECT a.*, u.name AS author_name, c.name_{$lang} AS category_name,
+            "SELECT a.*, u.name AS author_name, c.name_{$lang} AS category_name, c.slug AS category_slug,
                     m.path AS image_path
              FROM articles a
              LEFT JOIN users u ON a.author_id = u.id
@@ -142,7 +142,7 @@ class ArticleModel {
      */
     public function getFeatured(string $lang, int $limit = 1): array {
         $stmt = $this->db->prepare(
-            "SELECT a.*, u.name AS author_name, c.name_{$lang} AS category_name, m.path AS image_path
+            "SELECT a.*, u.name AS author_name, c.name_{$lang} AS category_name, c.slug AS category_slug, m.path AS image_path
              FROM articles a
              LEFT JOIN users u ON a.author_id = u.id
              LEFT JOIN categories c ON a.category_id = c.id

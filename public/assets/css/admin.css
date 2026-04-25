@@ -495,6 +495,7 @@ select.form-control option {
 
 /* Auth Pages Adjustments */
 .auth-wrapper {
+    width: 100%;
     min-height: 100vh;
     background: var(--admin-bg);
     display: flex;

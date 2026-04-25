@@ -1,7 +1,7 @@
 <?php require 'layout/header.php'; ?>
     
     <!-- Reading Progress Bar -->
-    <div id="reading-progress" style="position: fixed; top: 0; left: 0; height: 4px; background: var(--crimson); width: 0%; z-index: 9999; transition: width 0.1s ease-out;"></div>
+    <div id="reading-progress" style="position: fixed; top: 0; left: 0; height: 4px; background: var(--accent); width: 0%; z-index: 9999; transition: width 0.1s ease-out;"></div>
 
     <style>
         .article-body > p:first-of-type::first-letter {
@@ -10,8 +10,8 @@
             line-height: 1;
             font-weight: 900;
             padding-right: 12px;
-            color: var(--crimson);
-            font-family: var(--font-heading);
+            color: var(--accent);
+            font-family: var(--font-serif);
         }
     </style>
 
